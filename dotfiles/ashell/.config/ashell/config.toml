@@ -76,12 +76,12 @@ indicators = [ "IdleInhibitor", "PowerProfile", "Audio", "Microphone", "Bluetoot
 [[settings.CustomButton]]
 name = "Virtual Keyboard"
 icon = "⌨️"
-command = "/path/to/toggle-keyboard.sh"
-status_command = "/path/to/check-keyboard-status.sh"
+command = "/home/johnwick/.config/hypr/scripts/toggle-keyboard.sh"
+status_command = "/home/johnwick/.config/hypr/scripts/check-keyboard-status.sh"
 tooltip = "Toggle On-Screen Keyboard"
 
 [appearance]
-style = "Gradient"
+style = "Islands"
 font = "JetBrainsMono Nerd Font"
 
 primary_color = "#7aa2f7"
