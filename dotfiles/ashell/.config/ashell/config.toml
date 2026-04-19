@@ -54,8 +54,8 @@ weather_indicator = "IconAndTemperature"
 
 [settings]
 shutdown_cmd = "shutdown now"
-suspend_cmd = "systemctl suspend"
-hibernate_cmd = "systemctl hibernate"
+suspend_cmd = ""
+hibernate_cmd = ""
 reboot_cmd = "systemctl reboot"
 logout_cmd = "hyprctl dispatch exit"
 lock_cmd = "playerctl --all-players pause; hyprlock &"
