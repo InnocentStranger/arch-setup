@@ -1,0 +1,4 @@
+# Common bindings for Ctrl+Backspace
+"\C-h": backward-kill-word
+"\e[3;5~": backward-kill-word
+"\C-?": backward-kill-word
