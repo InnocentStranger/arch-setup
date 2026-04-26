@@ -4,8 +4,8 @@ position = "Top"
 
 [modules]
 left = [ [ "appLauncher", "Updates", "Workspaces" ] ]
-center = [ "WindowTitle" ]
-right = [ "SystemInfo", "MediaPlayer", [ "Tray", "Tempo", "Privacy", "Settings" ] ]
+center = [ "MediaPlayer", "WindowTitle" ]
+right = [ "SystemInfo", [ "Tray", "Tempo", "Privacy", "Settings" ] ]
 
 [updates]
 check_cmd = "checkupdates; paru -Qua"
