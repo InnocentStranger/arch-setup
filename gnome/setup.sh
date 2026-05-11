@@ -29,8 +29,8 @@ if ask "Install GNOME Tweaks?"; then
 fi
 
 # (Kitty, Tmux, NVIM)
-if ask "Install Kitty, Tmux, Neovim, and GNU Stow?"; then
-    sudo pacman -S kitty tmux neovim stow
+if ask "Install Kitty, Tmux, Neovim, Wl-Clipboard and GNU Stow?"; then
+    sudo pacman -S kitty tmux neovim stow wl-clipboard
 fi
 
 # 9. Nerd Font (JetBrains)
