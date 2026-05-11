@@ -6,26 +6,8 @@ ask() {
     [[ "$choice" == [Yy]* ]]
 }
 
-echo "------------------------------------------"
-echo "   Fedora 44 Keyboard-First Master Setup  "
-echo "------------------------------------------"
 
-# 1. RPM Fusion
-if ask "Install RPM Fusion?"; then
-    sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-fi
-
-# 2. Codec
-if ask "Install Multimedia Codecs (libavcodec-freeworld)?"; then
-  sudo dnf install -y libavcodec-freeworld
-fi
-
-# 3. Flathub
-if ask "Enable Flathub?"; then
-    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-fi
-
-# 4. Keybinds (Modular Scripts)
+# Keybinds (Modular Scripts)
 if ask "Apply all keybind scripts (Workspace, General, Custom)?"; then
     chmod +x ./keybinds/*.sh
     ./keybinds/gnome-workspace-keybinds.sh
@@ -33,33 +15,28 @@ if ask "Apply all keybind scripts (Workspace, General, Custom)?"; then
     ./keybinds/custom-keybinds.sh
 fi
 
-# 5. Walker
+#  Walker
 if ask "Install Walker & Elephant?"; then
     chmod +x ./walker-setup.sh
     ./walker-setup.sh
 fi
 
 
-# 6 & 7. GNOME Tools
-if ask "Install GNOME Extensions App & Tweaks?"; then
-    sudo dnf install -y gnome-extensions-app gnome-tweaks
+# GNOME Tools
+if ask "Install GNOME Tweaks?"; then
+    sudo pacman -S gnome-tweaks
+    paru -S gnome-shell-extension-copyous
 fi
 
-# 8, 11, 13. DNF Apps (Kitty, Tmux, NVIM)
+# (Kitty, Tmux, NVIM)
 if ask "Install Kitty, Tmux, Neovim, and GNU Stow?"; then
-    sudo dnf install -y kitty tmux neovim stow
+    sudo pacman -S kitty tmux neovim stow
 fi
 
 # 9. Nerd Font (JetBrains)
 if ask "Install JetBrains Mono Nerd Font?"; then
-    echo "📦 Downloading JetBrains Mono Nerd Font..."
-    FONT_DIR="$HOME/.local/share/fonts/JetBrainsMonoNerd"
-    mkdir -p "$FONT_DIR"
-    # Download directly from official Nerd Fonts GitHub release
-    curl -fLo "/tmp/JB.zip" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip
-    unzip -o /tmp/JB.zip -d "$FONT_DIR"
-    fc-cache -f
-    echo "✅ Font installed to $FONT_DIR"
+  sudo pacman -S ttf-jetbrains-mono-nerd
+  echo "✅ Font installed to $FONT_DIR"
 fi
 
 
@@ -72,10 +49,10 @@ if ask "Sync dotfiles using GNU Stow?"; then
     echo "🔗 Linking configs..."
     
     # Force remove the existing system .bashrc so Stow can link yours
-    rm -f ~/.bashrc
+    mv ~/.bashrc ~/.bashrc-original-bak
     
     # Include 'bash' in the list of packages to stow
-    stow -v -R -t ~/ --ignore='.*\.md' bash nvim tmux walker starship kitty
+    stow -v -R -t ~/ --ignore='.*\.md' bash nvim tmux starship kitty
     
     cd - || exit
     echo "✅ Dotfiles linked!"
@@ -83,7 +60,8 @@ fi
 
 # 10. Starship Prompt
 if ask "Install Starship Prompt?"; then
-  curl -sS https://starship.rs/install.sh | sh -s -- -y
+  # curl -sS https://starship.rs/install.sh | sh -s -- -y
+  sudo pacman -S starship
 fi
 
 # 12. NVM (Node Version Manager)
