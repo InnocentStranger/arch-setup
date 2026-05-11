@@ -16,5 +16,8 @@ gsettings set org.gnome.shell.keybindings show-screenshot-ui "['<Shift>Print']"
 # Alt + Print -> Immediate window screenshot (no menu)
 gsettings set org.gnome.shell.keybindings screenshot-window "['<Alt>Print']"
 
+# Disable Some Overlapping Keybinds
+gsettings set org.gnome.shell.keybindings toggle-message-tray "[]"
+gsettings set org.gnome.mutter overlay-key ''
 
 echo "✅ General keybinds applied!"

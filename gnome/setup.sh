@@ -15,6 +15,11 @@ if ask "Apply all keybind scripts (Workspace, General, Custom)?"; then
     ./keybinds/custom-keybinds.sh
 fi
 
+if ask "Enable Clipboard (Copyous Gnome Extension)"; then
+    chmod +x ./clipboard.sh
+    ./clipboard.sh
+fi
+
 #  Walker
 if ask "Install Walker & Elephant?"; then
     chmod +x ./walker-setup.sh
