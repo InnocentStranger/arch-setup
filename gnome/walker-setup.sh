@@ -12,6 +12,7 @@ paru -S elephant-desktopapplications elephant-files
 
 # ---  Start the Elephant Service ---
 echo "🧠 Starting Elephant background service..."
+elepahnt service enable
 systemctl --user daemon-reload
 systemctl --user enable --now elephant.service
 
