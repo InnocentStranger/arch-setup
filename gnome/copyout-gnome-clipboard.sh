@@ -4,7 +4,7 @@ echo "🚀 Setting up Copyous on CachyOS GNOME..."
 
 # 1. Install dependencies and the extension itself
 echo "📦 Installing packages..."
-paru -S --needed libgda6 gsound gnome-shell-extension-copyous-bin
+paru -S --needed libgda6 gsound gnome-shell-extension-copyous
 
 # Added a quick check to make sure the ini file actually exists before trying to load it
 if [ -f "copyous-config.ini" ]; then

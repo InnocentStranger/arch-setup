@@ -9,10 +9,7 @@ ask() {
 
 # Keybinds (Modular Scripts)
 if ask "Apply all keybind scripts (Workspace, General, Custom)?"; then
-    chmod +x ./keybinds/*.sh
-    ./keybinds/gnome-workspace-keybinds.sh
-    ./keybinds/general-keybinds.sh
-    ./keybinds/custom-keybinds.sh
+    ./keybinds.sh
 fi
 
 if ask "Enable Clipboard (Copyous Gnome Extension)"; then
