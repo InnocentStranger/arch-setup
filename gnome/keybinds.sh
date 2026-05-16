@@ -5,6 +5,9 @@ echo "Remove Keybinds"
 gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>m']"
 gsettings set org.gnome.desktop.wm.keybindings switch-applications "['<Alt>Tab']"
 
+# Close Window
+gsettings set org.gnome.desktop.wm.keybindings close "['<Super>q]"
+
 # Print
 echo "Print Shortcuts"
 gsettings set org.gnome.shell.keybindings screenshot "['Print']"
