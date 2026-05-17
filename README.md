@@ -2,7 +2,7 @@
 
 ### Usefull Packages
 ```sh
-sudo pacman -S tmux neovim tree-sitter-cli tar curl ripgrep nvm starship ttf-jetbrains-mono-nerd chromium spotify-launcher vesktop stow kitty obs-studio vscodium lazygit
+sudo pacman -S tmux neovim tree-sitter-cli tar curl ripgrep nvm starship ttf-jetbrains-mono-nerd chromium spotify-launcher vesktop stow kitty obs-studio vscodium lazygit openbsd-netcat
 ```
 
 ### Refresh Font Cache
