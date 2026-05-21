@@ -97,6 +97,7 @@ return {
           -- Controlled by updatetime option (200ms in options.lua).
           if client:supports_method("textDocument/documentHighlight") then
             local hl = vim.api.nvim_create_augroup("UserLspHighlight", { clear = false })
+            vim.api.nvim_clear_autocmds({ group = hl, buffer = event.buf })
 
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
               buffer   = event.buf,
