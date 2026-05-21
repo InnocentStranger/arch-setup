@@ -1,88 +1,62 @@
 -- lua/plugins/lsp.lua
 --
--- ─── ARCHITECTURE OVERVIEW ────────────────────────────────────────────────────
+-- ─── ARCHITECTURE ─────────────────────────────────────────────────────────────
 --
--- THREE plugins. Three separate jobs. They do not overlap.
+--   mason-org/mason.nvim          → installs binaries (lua-language-server, gopls, etc.)
+--   neovim/nvim-lspconfig         → contributes lsp/*.lua onto runtimepath (data only)
+--   mason-org/mason-lspconfig     → calls vim.lsp.enable() for installed servers
 --
---   mason.nvim              → installs the binary (e.g. lua-language-server)
---                             to ~/.local/share/nvim/mason/bin/
+-- ─── require('lspconfig') IS DEPRECATED ───────────────────────────────────────
 --
---   nvim-lspconfig          → contributes lsp/*.lua files onto runtimepath.
---                             Each file has: cmd, filetypes, root_markers.
---                             Neovim merges these with YOUR lsp/*.lua files.
---                             NOTE: require('lspconfig') is DEPRECATED.
---                             You never call it. The plugin works passively.
+--   require('lspconfig').gopls.setup({})   ← DEPRECATED, will error in future
+--   nvim-lspconfig (the plugin)            ← NOT deprecated, still needed as data
 --
---   mason-lspconfig.nvim    → bridge. Calls vim.lsp.enable() automatically
---                             for every server installed via Mason.
---                             Also provides :LspInstall command.
+--   nvim-lspconfig now works passively: it puts lsp/*.lua files on runtimepath
+--   that Neovim reads automatically. You never call require('lspconfig') again.
 --
--- ─── THE lsp/ DIRECTORY ──────────────────────────────────────────────────────
+-- ─── YOUR lsp/ FILES ──────────────────────────────────────────────────────────
 --
--- Neovim 0.11+ auto-discovers lsp/<server>.lua from ALL runtimepath entries.
--- nvim-lspconfig adds its own lsp/ to runtimepath (cmd, filetypes, root_markers).
--- YOUR ~/.config/nvim/lsp/<server>.lua adds only your custom settings.
--- Neovim MERGES both. You only write what you want to override.
+--   ~/.config/nvim/lsp/<server>.lua  → only your custom overrides
+--   nvim-lspconfig lsp/<server>.lua  → cmd, filetypes, root_markers (base)
+--   Neovim MERGES both automatically.
 --
--- Structure:
---   ~/.config/nvim/
---   ├── lsp/                   ← YOUR server configs (only custom settings)
---   │   ├── lua_ls.lua
---   │   ├── ts_ls.lua
---   │   ├── gopls.lua
---   │   └── ...
---   └── lua/plugins/lsp.lua   ← THIS FILE (plugin specs + LspAttach only)
+--   Use "after/lsp/" if you need your file to win over nvim-lspconfig.
+--   Regular "lsp/" merges with nvim-lspconfig (lspconfig takes precedence on conflicts).
 --
--- ─── WHAT require('lspconfig').gopls.setup() WAS ─────────────────────────────
+-- ─── DEFAULT KEYMAPS IN 0.11/0.12 (DO NOT REMAP) ────────────────────────────
 --
--- The OLD pattern did four things in one call:
---   1. Registered cmd/filetypes/root_markers for gopls
---   2. Merged your custom settings
---   3. Set up an on_attach callback
---   4. Started the server
+--   These exist globally, do nothing without LSP, no need to set in LspAttach:
+--     K        → hover
+--     grn      → rename
+--     gra      → code_action (normal + visual)
+--     grr      → references
+--     gri      → implementation
+--     grt      → type_definition
+--     grx      → codelens run
+--     gO       → document symbols
+--     <C-s>    → signature_help (insert mode)
 --
--- The NEW pattern splits these:
---   1. nvim-lspconfig lsp/gopls.lua  → cmd, filetypes, root_markers (passive, auto)
---   2. your lsp/gopls.lua            → your custom settings (passive, auto-merged)
---   3. LspAttach autocmd             → keymaps and per-buffer setup
---   4. vim.lsp.enable() via          → mason-lspconfig automatic_enable = true
---      mason-lspconfig
+--   NOT in defaults → set in LspAttach below:
+--     gd       → definition
+--     gD       → declaration
+--     <leader>ch → toggle inlay hints
 --
--- ─── DEFAULT LSP KEYMAPS IN 0.11/0.12 ───────────────────────────────────────
+-- ─── nvim-lsp-file-operations ────────────────────────────────────────────────
 --
--- These are set GLOBALLY by Neovim at startup — NOT inside LspAttach.
--- They do nothing when no LSP is attached but the mappings always exist.
--- DO NOT remap these; you would just duplicate what Neovim already provides.
---
---   K          → vim.lsp.buf.hover()
---   grn        → vim.lsp.buf.rename()
---   gra        → vim.lsp.buf.code_action()     (Normal + Visual)
---   grr        → vim.lsp.buf.references()
---   gri        → vim.lsp.buf.implementation()
---   grt        → vim.lsp.buf.type_definition()
---   grx        → vim.lsp.codelens.run()
---   gO         → vim.lsp.buf.document_symbol()
---   <C-s>      → vim.lsp.buf.signature_help()  (Insert mode)
---
--- What is NOT in the defaults (set in LspAttach below):
---   gd         → definition  (different from type_definition)
---   gD         → declaration
---   <leader>ch → toggle inlay hints
---   telescope variants if you want pickers for gd/gr etc.
---
--- ─── CAPABILITIES (blink.cmp) ────────────────────────────────────────────────
---
--- vim.lsp.config("*", { capabilities = ... }) sets capabilities for ALL servers.
--- blink.cmp must be loaded before any server attaches (lazy=false on blink).
--- The "*" wildcard is evaluated lazily at attach time, so load order is fine.
+--   Handles workspace/willRenameFiles + workspace/didRenameFiles LSP notifications.
+--   This is what tells ts_ls to update imports when you rename a file.
+--   Neovim core has no native vim.lsp.buf.rename_file — this fills that gap.
+--   Works with: oil.nvim (via its own integration), neo-tree, nvim-tree.
+--   NOTE: oil.nvim v2.3.0+ has its own willRenameFiles implementation.
+--   Keep this plugin if you want didRenameFiles support too (oil only does will).
 
 return {
 
   -- ── 1. mason.nvim ──────────────────────────────────────────────────────────
   {
     "mason-org/mason.nvim",
-    lazy = false,
-    priority = 100,       -- load before mason-lspconfig
+    lazy     = false,
+    priority = 100,
     opts = {
       ui = {
         border = "rounded",
@@ -96,74 +70,136 @@ return {
   },
 
   -- ── 2. nvim-lspconfig ──────────────────────────────────────────────────────
-  -- Load this as a dependency to put its lsp/ directory onto runtimepath.
-  -- You never require() it directly. It works passively.
+  -- Passive data provider. Never require() it directly.
+  -- Its lsp/*.lua files are merged automatically by Neovim.
   {
     "neovim/nvim-lspconfig",
-    lazy = false,
+    lazy     = false,
     priority = 90,
   },
 
-  -- ── 3. mason-lspconfig.nvim ────────────────────────────────────────────────
+  -- ── 3. mason-lspconfig ─────────────────────────────────────────────────────
   {
     "mason-org/mason-lspconfig.nvim",
-    lazy = false,
+    lazy     = false,
     priority = 80,
     dependencies = {
       "mason-org/mason.nvim",
-      "neovim/nvim-lspconfig",    -- must be in runtimepath first
+      "neovim/nvim-lspconfig",   -- must be on runtimepath before mason-lspconfig runs
     },
     opts = {
-      -- Servers to install automatically if missing.
-      -- mason-lspconfig translates these names to mason package names for you.
-      -- e.g. "lua_ls" → installs "lua-language-server" binary via mason.
       ensure_installed = {
-        "lua_ls",         -- Lua
-        "ts_ls",          -- TypeScript / JavaScript
-        "pyright",        -- Python
-        "gopls",          -- Go
-        "rust_analyzer",  -- Rust
-        "jsonls",         -- JSON
-        "yamlls",         -- YAML
-        "html",           -- HTML
-        "cssls",          -- CSS
-        "bashls",         -- Bash / Shell
-        "marksman",       -- Markdown
+        "lua_ls",
+        "ts_ls",
+        "html",
+        "cssls",
+        "tailwindcss",
+        "graphql",
+        "rust_analyzer",
+        "clangd",
+        "jsonls",
+        "yamlls",
+        "bashls",
+        "marksman",
       },
 
-      -- automatic_enable = true is the DEFAULT in mason-lspconfig v2.
-      -- It calls vim.lsp.enable() for every server installed via Mason.
-      -- You do not need to call vim.lsp.enable() yourself for these servers.
-      -- To exclude a specific server (e.g. managed by another plugin like rustaceanvim):
+      -- Default: true. Calls vim.lsp.enable() for every server installed by Mason.
+      -- You never need to call vim.lsp.enable() yourself for these.
+      -- Exclude servers managed by dedicated plugins (e.g. rustaceanvim for rust):
       --   automatic_enable = { exclude = { "rust_analyzer" } }
       automatic_enable = true,
     },
   },
 
-  -- ── 4. Global capabilities + LspAttach ────────────────────────────────────
-  -- This is not a real plugin entry — it piggybacks on nvim-lspconfig
-  -- to run setup code after the plugin stack is ready.
+  -- ── 4. lazydev.nvim ────────────────────────────────────────────────────────
+  -- Dynamically configures lua_ls workspace libraries for Neovim config editing.
+  -- Better than the static workspace.library approach in lsp/lua_ls.lua because
+  -- it only loads type libraries for plugins you actually require() in open files.
+  -- IMPORTANT: remove the workspace.library setting from lsp/lua_ls.lua if you
+  -- use this — they conflict and lazydev wins more gracefully.
   {
-    "neovim/nvim-lspconfig",    -- lazy.nvim deduplicates same plugin name
+    "folke/lazydev.nvim",
+    ft   = "lua",    -- only loads on lua files, zero cost otherwise
+    opts = {
+      library = {
+        -- Load luvit types when vim.uv is used (async I/O)
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+
+  -- ── 5. nvim-lsp-file-operations ────────────────────────────────────────────
+  -- Notifies LSP servers when files are renamed/moved so they can update imports.
+  -- Fills the gap: Neovim core has no vim.lsp.buf.rename_file.
+  -- Works with oil.nvim, neo-tree, nvim-tree, triptych.
+  {
+    "antosha417/nvim-lsp-file-operations",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    event        = "BufReadPost",
+    config       = true,    -- calls require("lsp-file-operations").setup() with defaults
+  },
+
+  -- ── 6. tiny-inline-diagnostic.nvim ─────────────────────────────────────────
+  -- Replaces Neovim's default virtual_text diagnostics with inline overlays
+  -- that don't push code around. Actively maintained.
+  -- MUST disable vim.diagnostic virtual_text after setup to avoid duplication.
+  {
+    "rachartier/tiny-inline-diagnostic.nvim",
+    event    = "LspAttach",    -- no point loading before LSP runs
+    priority = 1000,
+    opts = {
+      -- Preset options: "default", "modern", "minimal", "powerline",
+      -- "ghost", "simple", "nonerdfont", "amongus"
+      preset = "modern",
+      options = {
+        -- Show the source (which linter/LSP produced this diagnostic)
+        show_source = {
+          enabled   = true,
+          if_many   = true,   -- only show source when there are multiple sources
+        },
+        -- Multilines: show full message when it wraps
+        multilines = {
+          enabled        = true,
+          always_show    = false,   -- only expand on current line
+        },
+        -- Show all diagnostics on the line, not just the most severe
+        multiple_diag_under_cursor = true,
+        -- Show a count badge when there are multiple diagnostics on a line
+        show_all_diags_on_cursorline = false,
+        overflow = {
+          mode = "wrap",   -- "wrap" | "none" | "oneline"
+        },
+      },
+    },
+    config = function(_, opts)
+      require("tiny-inline-diagnostic").setup(opts)
+      -- Disable Neovim's default virtual_text to avoid duplication.
+      -- tiny-inline-diagnostic handles all diagnostic display.
+      vim.diagnostic.config({ virtual_text = false })
+    end,
+  },
+
+  -- ── 7. Global capabilities + LspAttach ────────────────────────────────────
+  {
+    "neovim/nvim-lspconfig",   -- deduped by lazy.nvim
     config = function()
 
-      -- ── Global capabilities (all servers) ──────────────────────────────────
-      -- Tell every LSP server what the client (blink.cmp) can handle.
-      -- blink.cmp must be loaded before any server attaches (it's lazy=false).
+      -- ── Global capabilities ─────────────────────────────────────────────────
+      -- Sent to every LSP server at attach time. blink.cmp must be loaded first
+      -- (it is, since it's lazy=false in completion.lua).
       vim.lsp.config("*", {
         capabilities = (function()
           local ok, blink = pcall(require, "blink.cmp")
           if ok then
             return blink.get_lsp_capabilities()
           end
-          -- Fallback if blink.cmp is not loaded yet
           return vim.lsp.protocol.make_client_capabilities()
         end)(),
       })
 
-      -- ── LspAttach: keymaps that are NOT in Neovim defaults ─────────────────
-      -- Runs every time any LSP server attaches to a buffer.
-      -- Only map things that Neovim does NOT already provide globally.
+      -- ── LspAttach ───────────────────────────────────────────────────────────
+      -- Only map things NOT already in Neovim's default keymaps.
+      -- K, grn, gra, grr, gri, grt, grx, gO, <C-s> are already mapped globally.
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspAttach", { clear = true }),
         callback = function(event)
@@ -177,30 +213,24 @@ return {
             })
           end
 
-          -- gd and gD are NOT in Neovim's default keymaps.
-          -- We use telescope pickers here for a UI — swap for vim.lsp.buf.*
-          -- versions if you don't want a picker.
+          -- gd: go to definition — NOT in Neovim defaults, use telescope picker
           map("gd", function()
             require("telescope.builtin").lsp_definitions()
           end, "Go to definition")
 
+          -- gD: declaration — NOT in defaults
           map("gD", vim.lsp.buf.declaration, "Go to declaration")
 
-          -- Inlay hints: toggle on/off.
-          -- NOT a default. Enable by default if the server supports them.
+          -- Inlay hints: enable by default if supported, with toggle keymap
           if client:supports_method("textDocument/inlayHint") then
-            -- Enable inlay hints by default for this buffer
             vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
-
             map("<leader>ch", function()
               local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf })
               vim.lsp.inlay_hint.enable(not enabled, { bufnr = event.buf })
             end, "Toggle inlay hints")
           end
 
-          -- Code lens: refresh and display if the server supports it.
-          -- grx (run codelens) IS a default keymap — don't remap it.
-          -- But enabling auto-refresh is not default.
+          -- Code lens: auto-refresh if supported (grx to run is already default)
           if client:supports_method("textDocument/codeLens") then
             vim.lsp.codelens.refresh()
             vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
@@ -209,18 +239,17 @@ return {
             })
           end
 
-          -- Highlight word under cursor (document highlight).
-          -- When cursor rests on a symbol, all its references in the buffer glow.
+          -- Document highlight: glow all references to symbol under cursor
           if client:supports_method("textDocument/documentHighlight") then
-            local hl_group = vim.api.nvim_create_augroup("UserLspHighlight", { clear = false })
+            local hl = vim.api.nvim_create_augroup("UserLspHighlight", { clear = false })
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-              buffer = event.buf,
-              group  = hl_group,
+              buffer   = event.buf,
+              group    = hl,
               callback = vim.lsp.buf.document_highlight,
             })
             vim.api.nvim_create_autocmd("CursorMoved", {
               buffer   = event.buf,
-              group    = hl_group,
+              group    = hl,
               callback = vim.lsp.buf.clear_references,
             })
           end
