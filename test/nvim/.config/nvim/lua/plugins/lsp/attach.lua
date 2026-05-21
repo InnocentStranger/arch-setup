@@ -1,35 +1,10 @@
 -- lua/plugins/lsp/attach.lua
---
--- Global LSP capabilities and per-buffer setup via LspAttach.
--- This file owns: capabilities, keymaps, inlay hints, codelens, doc highlight.
---
--- ─── WHAT NEOVIM 0.11/0.12 PROVIDES BY DEFAULT ───────────────────────────────
--- These keymaps are set GLOBALLY at startup, not in LspAttach.
--- They are no-ops when no LSP is attached. Do not remap them.
---
---   K        → vim.lsp.buf.hover()
---   grn      → vim.lsp.buf.rename()
---   gra      → vim.lsp.buf.code_action()     (Normal + Visual)
---   grr      → vim.lsp.buf.references()
---   gri      → vim.lsp.buf.implementation()
---   grt      → vim.lsp.buf.type_definition()
---   grx      → vim.lsp.codelens.run()
---   gO       → vim.lsp.buf.document_symbol()
---   <C-s>    → vim.lsp.buf.signature_help()  (Insert)
---
--- ─── WHAT WE ADD IN LspAttach ─────────────────────────────────────────────────
---   gd       → definition (not in defaults; uses telescope picker)
---   gD       → declaration (not in defaults)
---   <leader>ch → toggle inlay hints
-
 return {
   {
-    "neovim/nvim-lspconfig",   -- deduped by lazy.nvim; runs config after servers.lua
+    "neovim/nvim-lspconfig",
     config = function()
-
-      -- ── Global capabilities ───────────────────────────────────────────────
-      -- Applied to every LSP server at attach time via the "*" wildcard.
-      -- blink.cmp must be loaded before any server attaches (lazy=false).
+      -- 1. ── Global Capabilities ─────────────────────────────────────────────
+      -- Injects blink.cmp autocomplete capabilities into every server seamlessly.
       vim.lsp.config("*", {
         capabilities = (function()
           local ok, blink = pcall(require, "blink.cmp")
@@ -38,29 +13,23 @@ return {
         end)(),
       })
 
-      -- ── LspAttach ─────────────────────────────────────────────────────────
+      -- 2. ── LspAttach (Buffer-Local Logic) ──────────────────────────────────
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspAttach", { clear = true }),
         callback = function(event)
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if not client then return end
 
-          local map = function(keys, func, desc, mode)
-            vim.keymap.set(mode or "n", keys, func, {
-              buffer = event.buf,
-              desc   = "LSP: " .. desc,
-            })
+          -- Helper to bind keys strictly to this specific buffer
+          local map = function(keys, func, desc)
+            vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
           end
 
-          -- gd: go to definition via telescope (not in Neovim defaults)
-          map("gd", function()
-            require("telescope.builtin").lsp_definitions()
-          end, "Go to definition")
-
-          -- gD: declaration (not in defaults)
+          -- Map Telescope Definition (Overrides nothing, adds to defaults)
+          map("gd", require("telescope.builtin").lsp_definitions, "Go to definition")
           map("gD", vim.lsp.buf.declaration, "Go to declaration")
 
-          -- Inlay hints
+          -- Inlay hints (Modern 0.10+ Native API)
           if client:supports_method("textDocument/inlayHint") then
             vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
             map("<leader>ch", function()
@@ -69,26 +38,27 @@ return {
             end, "Toggle inlay hints")
           end
 
-          -- Code lens auto-refresh (grx to run is already a default keymap)
+          -- CodeLens (FIXED: Modern 0.12+ Native API)
+          -- Replaces the deprecated codelens.refresh() loop
           if client:supports_method("textDocument/codeLens") then
-            vim.lsp.codelens.refresh()
-            vim.api.nvim_create_autocmd(
-              { "BufEnter", "CursorHold", "InsertLeave" },
-              { buffer = event.buf, callback = vim.lsp.codelens.refresh }
-            )
+            vim.lsp.codelens.enable(true, { bufnr = event.buf })
           end
 
-          -- Document highlight: glow all references to symbol under cursor
+          -- Document Highlight: Glows all references of the variable under your cursor
+          -- (Fact Check: As of 0.12, this still requires a manual autocmd block, 
+          -- there is no .enable() API for document_highlight yet).
           if client:supports_method("textDocument/documentHighlight") then
             local hl = vim.api.nvim_create_augroup("UserLspHighlight", { clear = false })
-            vim.api.nvim_create_autocmd(
-              { "CursorHold", "CursorHoldI" },
-              { buffer = event.buf, group = hl, callback = vim.lsp.buf.document_highlight }
-            )
-            vim.api.nvim_create_autocmd(
-              "CursorMoved",
-              { buffer = event.buf, group = hl, callback = vim.lsp.buf.clear_references }
-            )
+            vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+              buffer = event.buf,
+              group = hl,
+              callback = vim.lsp.buf.document_highlight
+            })
+            vim.api.nvim_create_autocmd("CursorMoved", {
+              buffer = event.buf,
+              group = hl,
+              callback = vim.lsp.buf.clear_references
+            })
           end
         end,
       })
