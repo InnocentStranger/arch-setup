@@ -16,49 +16,37 @@
 --   gO       → document symbols
 --   <C-s>    → signature help (Insert mode)
 --
---   These are global, active at startup, no-ops without LSP. Don't remap them.
---
 -- ─── WHAT THIS FILE ADDS ──────────────────────────────────────────────────────
 --
 --   gd             → go to definition (telescope picker)
 --   gD             → go to declaration
 --   <leader>ch     → toggle inlay hints
 --
---   Plus per-server feature setup when the server supports it:
---     inlay hints      → enabled by default, toggled with <leader>ch
---     codelens         → enabled via vim.lsp.codelens.enable() (0.12 API)
---     document highlight → cursor rests on symbol → all references glow
+--   Per-server, checked with supports_method():
+--     textDocument/inlayHint        → grey inline type/param annotations
+--     textDocument/codeLens         → actionable annotations above functions
+--     textDocument/documentHighlight → glow all refs to symbol under cursor
+--     textDocument/foldingRange     → LSP-aware folding (beats treesitter folding)
+--     textDocument/formatting       → wires gq to LSP formatexpr (NOT format-on-save,
+--                                     that is conform.nvim's job)
 
 return {
   {
-    "neovim/nvim-lspconfig",  -- deduped by lazy.nvim; runs after servers.lua
+    "neovim/nvim-lspconfig",
     config = function()
 
       -- ── 1. Global capabilities ──────────────────────────────────────────────
-      --
-      -- vim.lsp.config("*") applies to every server at attach time.
-      -- blink.cmp must be loaded before any server attaches (it's lazy=false).
-      --
-      -- What get_lsp_capabilities() adds over the bare defaults:
-      --   - snippet support (servers send richer completions)
-      --   - resolve support (servers send docs/details in completion items)
-      --   - everything else blink supports that bare Neovim doesn't advertise
+      -- Applied to every LSP server via the "*" wildcard.
+      -- blink.cmp must be loaded before any server attaches (lazy=false).
       vim.lsp.config("*", {
         capabilities = (function()
           local ok, blink = pcall(require, "blink.cmp")
           if ok then return blink.get_lsp_capabilities() end
-          -- Fallback: blink not loaded yet or not installed
           return vim.lsp.protocol.make_client_capabilities()
         end)(),
       })
 
       -- ── 2. LspAttach ────────────────────────────────────────────────────────
-      --
-      -- Fires once per buffer when any LSP server attaches.
-      -- Keymaps are buffer-local — only active in buffers with LSP attached.
-      -- client:supports_method() checks are mandatory before enabling features:
-      -- not every server supports every capability, and skipping the check
-      -- causes silent failures or wasted autocmds.
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspAttach", { clear = true }),
         callback = function(event)
@@ -72,22 +60,19 @@ return {
             })
           end
 
-          -- gd: go to definition — NOT in Neovim's defaults
-          -- Using telescope gives a picker UI; swap for vim.lsp.buf.definition
-          -- if you prefer to jump directly without a picker.
+          -- ── Keymaps not in Neovim defaults ──────────────────────────────────
+
+          -- gd: definition via telescope picker (not in Neovim defaults)
           map("gd", function()
             require("telescope.builtin").lsp_definitions()
           end, "Go to definition")
 
-          -- gD: declaration — NOT in Neovim's defaults
-          -- Different from definition: declaration = where the symbol is declared
-          -- (e.g. function signature in a .h file); definition = where it's implemented
+          -- gD: declaration (not in Neovim defaults)
           map("gD", vim.lsp.buf.declaration, "Go to declaration")
 
           -- ── Inlay hints ─────────────────────────────────────────────────────
-          -- Grey inline annotations showing inferred types, parameter names, etc.
-          -- Example: func(/* name: */ "John", /* age: */ 30)
-          -- Enabled by default if the server supports them; toggle with <leader>ch.
+          -- Grey inline annotations: inferred types, parameter names.
+          -- Enabled by default; toggle with <leader>ch.
           if client:supports_method("textDocument/inlayHint") then
             vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
 
@@ -98,23 +83,18 @@ return {
           end
 
           -- ── Codelens ────────────────────────────────────────────────────────
-          -- Small actionable annotations that servers render above/beside code.
-          -- Examples: "▶ Run test", "2 references", "▶ Debug"
-          -- Run the lens at cursor with grx (a default Neovim keymap — don't remap).
-          --
-          -- 0.12 API: vim.lsp.codelens.enable(true, { bufnr = bufnr })
-          -- This replaces the old pattern of calling vim.lsp.codelens.refresh()
-          -- manually and setting up autocmds. Neovim now manages refresh internally.
-          --
-          -- DEPRECATED (removed in 0.13): vim.lsp.codelens.refresh()
+          -- Actionable annotations servers render near code: "▶ Run test", "2 refs".
+          -- Run with grx (Neovim default keymap — don't remap).
+          -- vim.lsp.codelens.enable() is the 0.12 API.
+          -- vim.lsp.codelens.refresh() is DEPRECATED (warns now, errors in 0.13).
           if client:supports_method("textDocument/codeLens") then
             vim.lsp.codelens.enable(true, { bufnr = event.buf })
           end
 
           -- ── Document highlight ───────────────────────────────────────────────
-          -- When cursor rests on a symbol, all its references in the buffer glow.
-          -- Purely visual — no keymap needed. Clears when cursor moves.
-          -- Controlled by updatetime (set in options.lua, default 200ms).
+          -- Cursor rests on a symbol → all its references in the buffer glow.
+          -- Clears automatically on cursor move. Visual only, no keymap needed.
+          -- Controlled by updatetime option (200ms in options.lua).
           if client:supports_method("textDocument/documentHighlight") then
             local hl = vim.api.nvim_create_augroup("UserLspHighlight", { clear = false })
 
@@ -123,12 +103,39 @@ return {
               group    = hl,
               callback = vim.lsp.buf.document_highlight,
             })
-
             vim.api.nvim_create_autocmd("CursorMoved", {
               buffer   = event.buf,
               group    = hl,
               callback = vim.lsp.buf.clear_references,
             })
+          end
+
+          -- ── LSP folding ─────────────────────────────────────────────────────
+          -- Override Treesitter foldexpr with LSP foldexpr when the server
+          -- supports it. LSP folding is semantically aware (real function/class
+          -- boundaries) vs Treesitter which is syntactic.
+          --
+          -- Global fallback (in options.lua):
+          --   vim.o.foldmethod = "expr"
+          --   vim.o.foldexpr   = "v:lua.vim.treesitter.foldexpr()"
+          --
+          -- This overrides it per-window when LSP can do better.
+          -- vim.wo[win][0] sets it window+buffer-locally (from official docs).
+          if client:supports_method("textDocument/foldingRange") then
+            local win = vim.api.nvim_get_current_win()
+            vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+          end
+
+          -- ── formatexpr ──────────────────────────────────────────────────────
+          -- Wires the `gq` motion to use LSP formatting instead of Vim's default
+          -- internal formatter. Useful for: gq inside a function, gqq on a line,
+          -- gq in visual mode to reformat a selection.
+          --
+          -- This is NOT format-on-save. That is conform.nvim's job (formatting.lua).
+          -- These two do not conflict — conform runs on BufWritePre,
+          -- formatexpr only runs when you explicitly press gq.
+          if client:supports_method("textDocument/formatting") then
+            vim.bo[event.buf].formatexpr = "v:lua.vim.lsp.formatexpr()"
           end
 
         end,
