@@ -62,9 +62,9 @@ vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>",       { desc = "New tab" })
 vim.keymap.set("n", "<leader>tc", "<cmd>tabclose<CR>",     { desc = "Close tab" })
 vim.keymap.set("n", "<leader>to", "<cmd>tabonly<CR>",      { desc = "Close other tabs" })
 
--- Command-line menu navigation
-vim.keymap.set("c", "<C-j>", "<C-n>", { desc = "Command line next item/history" })
-vim.keymap.set("c", "<C-k>", "<C-p>", { desc = "Command line prev item/history" })
+-- Command-line menu navigation (C-j,k overridden by blink.nvim)
+-- vim.keymap.set("c", "<C-j>", "<C-n>", { desc = "Command line next item/history" })
+-- vim.keymap.set("c", "<C-k>", "<C-p>", { desc = "Command line prev item/history" })
 
 -- ========================================================================== --
 --                           CUSTOM FUNCTIONS                                 --
