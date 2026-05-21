@@ -6,8 +6,6 @@ return {
     lazy     = false, -- Blink should load immediately to handle its internal caching
     dependencies = {
       "rafamadriz/friendly-snippets",
-      -- Make sure lazydev is actually installed so blink can use it
-      { "folke/lazydev.nvim", ft = "lua", opts = {} },
     },
     opts = {
       keymap = {
@@ -68,6 +66,9 @@ return {
       },
 
       cmdline = {
+        completion = {
+            menu = { auto_show = true },
+        },
         keymap = {
           preset = "cmdline",
           ["<C-j>"] = { "select_next", "fallback" },
