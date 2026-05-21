@@ -75,7 +75,6 @@ return {
         },
       },
     },
-    -- Crucial 2026 addition for lazy.nvim modularity:
     -- Allows other plugins to safely inject their own completion sources
     opts_extend = { "sources.default" }
   },
