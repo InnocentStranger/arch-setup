@@ -62,6 +62,12 @@ vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>",       { desc = "New tab" })
 vim.keymap.set("n", "<leader>tc", "<cmd>tabclose<CR>",     { desc = "Close tab" })
 vim.keymap.set("n", "<leader>to", "<cmd>tabonly<CR>",      { desc = "Close other tabs" })
 
+-- Normal mode: <leader>/ triggers gcc (Line comment)
+vim.keymap.set('n', '<leader>/', 'gcc', { remap = true, desc = "Toggle Comment Line" })
+
+-- Visual mode: <leader>/ triggers gc (Selection comment)
+vim.keymap.set('v', '<leader>/', 'gc', { remap = true, desc = "Toggle Comment Selection" })
+
 -- Command-line menu navigation (C-j,k overridden by blink.nvim)
 -- vim.keymap.set("c", "<C-j>", "<C-n>", { desc = "Command line next item/history" })
 -- vim.keymap.set("c", "<C-k>", "<C-p>", { desc = "Command line prev item/history" })
