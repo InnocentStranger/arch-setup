@@ -71,6 +71,8 @@ return {
         },
         keymap = {
           preset = "cmdline",
+          ["<CR>"] = { "fallback" },
+          ["<Tab>"] = { "accept", "fallback" },
           ["<C-j>"] = { "select_next", "fallback" },
           ["<C-k>"] = { "select_prev", "fallback" },
         },
