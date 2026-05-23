@@ -55,7 +55,7 @@ return {
     enable_named_colors = true,
 
     ---Highlight tailwind colors, e.g. 'bg-blue-500'
-    enable_tailwind = true,
+    enable_tailwind = false,
 
     ---Set custom colors
     ---Label must be properly escaped with '%' to adhere to `string.gmatch`
