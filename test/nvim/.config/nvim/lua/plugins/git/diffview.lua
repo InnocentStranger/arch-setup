@@ -2,7 +2,7 @@
 
 return {
   "dlyongemallo/diffview.nvim",
-  lazy = true,
+  version = "*",
   cmd = {
     "DiffviewOpen",
     "DiffviewClose",
@@ -10,6 +10,7 @@ return {
     "DiffviewFocusFiles",
     "DiffviewRefresh",
     "DiffviewFileHistory",
+    "DiffviewDiffFiles",
   },
   opts = {},
 }
