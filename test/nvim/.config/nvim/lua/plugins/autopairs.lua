@@ -18,6 +18,20 @@
 --   - Works correctly with blink.cmp out of the box
 --   - Lighter than nvim-autopairs (no rule engine, no handler system)
 --
+-- ─── TOGGLE VARIABLES ─────────────────────────────────────────────────────────
+--
+-- mini.pairs respects two built-in variables — no custom logic needed:
+--
+--   vim.g.minipairs_disable = true   → disables globally for the session
+--   vim.b.minipairs_disable = true   → disables for the current buffer only
+--
+-- Setting either to false (or nil) re-enables pairing.
+-- The buffer-local variable takes precedence over the global one.
+--
+-- Keymaps:
+--   <leader>tp  → toggle autopairs for the current buffer
+--   <leader>tP  → toggle autopairs globally for the session
+--
 -- ─── WHAT mini.pairs DOES ─────────────────────────────────────────────────────
 --
 -- Typing (  → inserts ()  and puts cursor between them
@@ -33,22 +47,43 @@
 -- Per-filetype rule customization via Rule()           → use nvim-autopairs
 --
 -- If you need any of the above, swap this file for nvim-autopairs.
--- The blink.cmp auto_brackets feature still handles () after function completion
--- regardless of which autopairs plugin you use.
 
 return {
     {
         "echasnovski/mini.pairs",
-        version = false,         -- mini.nvim does not use semver tags; use HEAD
+        version = false,     -- mini.nvim does not use semver tags; use HEAD
         event   = "InsertEnter", -- only needed in insert mode
 
+        keys    = {
+            {
+                "<leader>tp",
+                function()
+                    vim.b.minipairs_disable = not vim.b.minipairs_disable
+                    vim.notify(
+                        "Autopairs: " .. (vim.b.minipairs_disable and "disabled" or "enabled") .. " (buffer)",
+                        vim.log.levels.INFO
+                    )
+                end,
+                desc = "Toggle autopairs (buffer)",
+            },
+            {
+                "<leader>tP",
+                function()
+                    vim.g.minipairs_disable = not vim.g.minipairs_disable
+                    vim.notify(
+                        "Autopairs: " .. (vim.g.minipairs_disable and "disabled" or "enabled") .. " (global)",
+                        vim.log.levels.INFO
+                    )
+                end,
+                desc = "Toggle autopairs (global)",
+            },
+        },
+
         opts    = {
-            -- Pairs to auto-close. Each entry: opening = { closing, opts }
-            -- 'action' controls what triggers the pair: 'open', 'close', or 'closeopen'
             modes = { insert = true, command = false, terminal = false },
 
-            -- These are the default pairs. Listed explicitly so they're visible.
-            -- Remove a pair by setting it to false, e.g. ["'"] = false
+            -- neigh_pattern = "[^\\]." means: don't pair when preceded by a backslash.
+            -- The "'" pattern uses [^%a\\.] to avoid pairing inside words (don't → don't').
             mappings = {
                 ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
                 ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
