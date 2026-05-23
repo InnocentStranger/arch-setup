@@ -7,20 +7,20 @@
 return {
   {
     "rachartier/tiny-inline-diagnostic.nvim",
-    event    = "LspAttach",
+    event = "LspAttach",
     priority = 1000,
     opts = {
       preset = "modern",
       options = {
         show_source = {
           enabled = true,
-          if_many  = true,
+          if_many = true,
         },
         multilines = {
-          enabled     = true,
+          enabled = true,
           always_show = false,
         },
-        multiple_diag_under_cursor  = true,
+        multiple_diag_under_cursor = true,
         show_all_diags_on_cursorline = false,
         overflow = { mode = "wrap" },
       },

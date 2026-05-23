@@ -10,14 +10,14 @@
 return {
   {
     "mason-org/mason.nvim",
-    lazy     = false,
+    lazy = false,
     priority = 100,
     opts = {
       ui = {
         border = "rounded",
-        icons  = {
-          package_installed   = "✓",
-          package_pending     = "➜",
+        icons = {
+          package_installed = "✓",
+          package_pending = "➜",
           package_uninstalled = "✗",
         },
       },

@@ -18,7 +18,7 @@
 return {
   {
     "folke/lazydev.nvim",
-    ft   = "lua",
+    ft = "lua",
     opts = {
       library = {
         { path = "${3rd}/luv/library", words = { "vim%.uv" } },
@@ -29,7 +29,7 @@ return {
   {
     "antosha417/nvim-lsp-file-operations",
     dependencies = { "nvim-lua/plenary.nvim" },
-    event        = "BufReadPost",
-    config       = true,
+    event = "BufReadPost",
+    config = true,
   },
 }

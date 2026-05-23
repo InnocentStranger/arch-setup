@@ -49,52 +49,52 @@
 -- If you need any of the above, swap this file for nvim-autopairs.
 
 return {
-    {
-        "echasnovski/mini.pairs",
-        version = false,     -- mini.nvim does not use semver tags; use HEAD
-        event   = "InsertEnter", -- only needed in insert mode
+  {
+    "echasnovski/mini.pairs",
+    version = false, -- mini.nvim does not use semver tags; use HEAD
+    event = "InsertEnter", -- only needed in insert mode
 
-        keys    = {
-            {
-                "<leader>tp",
-                function()
-                    vim.b.minipairs_disable = not vim.b.minipairs_disable
-                    vim.notify(
-                        "Autopairs: " .. (vim.b.minipairs_disable and "disabled" or "enabled") .. " (buffer)",
-                        vim.log.levels.INFO
-                    )
-                end,
-                desc = "Toggle autopairs (buffer)",
-            },
-            {
-                "<leader>tP",
-                function()
-                    vim.g.minipairs_disable = not vim.g.minipairs_disable
-                    vim.notify(
-                        "Autopairs: " .. (vim.g.minipairs_disable and "disabled" or "enabled") .. " (global)",
-                        vim.log.levels.INFO
-                    )
-                end,
-                desc = "Toggle autopairs (global)",
-            },
-        },
-
-        opts    = {
-            modes = { insert = true, command = false, terminal = false },
-
-            -- neigh_pattern = "[^\\]." means: don't pair when preceded by a backslash.
-            -- The "'" pattern uses [^%a\\.] to avoid pairing inside words (don't → don't').
-            mappings = {
-                ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
-                ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
-                ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\]." },
-                [")"] = { action = "close", pair = "()", neigh_pattern = "[^\\]." },
-                ["]"] = { action = "close", pair = "[]", neigh_pattern = "[^\\]." },
-                ["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\]." },
-                ['"'] = { action = "closeopen", pair = '""', neigh_pattern = "[^\\].", register = { cr = false } },
-                ["'"] = { action = "closeopen", pair = "''", neigh_pattern = "[^%a\\].", register = { cr = false } },
-                ["`"] = { action = "closeopen", pair = "``", neigh_pattern = "[^\\].", register = { cr = false } },
-            },
-        },
+    keys = {
+      {
+        "<leader>tp",
+        function()
+          vim.b.minipairs_disable = not vim.b.minipairs_disable
+          vim.notify(
+            "Autopairs: " .. (vim.b.minipairs_disable and "disabled" or "enabled") .. " (buffer)",
+            vim.log.levels.INFO
+          )
+        end,
+        desc = "Toggle autopairs (buffer)",
+      },
+      {
+        "<leader>tP",
+        function()
+          vim.g.minipairs_disable = not vim.g.minipairs_disable
+          vim.notify(
+            "Autopairs: " .. (vim.g.minipairs_disable and "disabled" or "enabled") .. " (global)",
+            vim.log.levels.INFO
+          )
+        end,
+        desc = "Toggle autopairs (global)",
+      },
     },
+
+    opts = {
+      modes = { insert = true, command = false, terminal = false },
+
+      -- neigh_pattern = "[^\\]." means: don't pair when preceded by a backslash.
+      -- The "'" pattern uses [^%a\\.] to avoid pairing inside words (don't → don't').
+      mappings = {
+        ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\]." },
+        ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\]." },
+        ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\]." },
+        [")"] = { action = "close", pair = "()", neigh_pattern = "[^\\]." },
+        ["]"] = { action = "close", pair = "[]", neigh_pattern = "[^\\]." },
+        ["}"] = { action = "close", pair = "{}", neigh_pattern = "[^\\]." },
+        ['"'] = { action = "closeopen", pair = '""', neigh_pattern = "[^\\].", register = { cr = false } },
+        ["'"] = { action = "closeopen", pair = "''", neigh_pattern = "[^%a\\].", register = { cr = false } },
+        ["`"] = { action = "closeopen", pair = "``", neigh_pattern = "[^\\].", register = { cr = false } },
+      },
+    },
+  },
 }

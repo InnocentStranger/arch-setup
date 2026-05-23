@@ -34,43 +34,43 @@ return {
   -- ── catppuccin ──────────────────────────────────────────────────────────────
   {
     "catppuccin/nvim",
-    name     = "catppuccin",
-    lazy     = not is_active("catppuccin"),
+    name = "catppuccin",
+    lazy = not is_active("catppuccin"),
     priority = 1000,
     opts = {
-      flavour    = "mocha",      -- latte | frappe | macchiato | mocha
+      flavour = "mocha", -- latte | frappe | macchiato | mocha
       background = { light = "latte", dark = "mocha" },
       transparent_background = false,
-      show_end_of_buffer     = false,
-      term_colors            = true,
+      show_end_of_buffer = false,
+      term_colors = true,
       dim_inactive = { enabled = false },
       styles = {
-        comments     = { "italic" },
+        comments = { "italic" },
         conditionals = { "italic" },
-        functions    = {},
-        keywords     = {},
-        variables    = {},
+        functions = {},
+        keywords = {},
+        variables = {},
       },
       -- catppuccin requires explicit flags per plugin to apply its highlights.
       -- Plugins not listed fall back to generic highlights (still works).
       integrations = {
-        blink_cmp        = true,
-        treesitter       = true,
+        blink_cmp = true,
+        treesitter = true,
         native_lsp = {
-          enabled  = true,
+          enabled = true,
           underlines = {
-            errors      = { "undercurl" },
-            hints       = { "undercurl" },
-            warnings    = { "undercurl" },
+            errors = { "undercurl" },
+            hints = { "undercurl" },
+            warnings = { "undercurl" },
             information = { "undercurl" },
           },
           inlay_hints = { background = true },
         },
-        telescope        = { enabled = true },
-        which_key        = true,
-        gitsigns         = true,
+        telescope = { enabled = true },
+        which_key = true,
+        gitsigns = true,
         indent_blankline = { enabled = true },
-        mini             = { enabled = true },
+        mini = { enabled = true },
       },
     },
     config = function(_, opts)
@@ -84,17 +84,17 @@ return {
   -- ── tokyonight ──────────────────────────────────────────────────────────────
   {
     "folke/tokyonight.nvim",
-    lazy     = not is_active("tokyonight"),
+    lazy = not is_active("tokyonight"),
     priority = 1000,
     opts = {
-      style       = "moon",  -- storm | night | moon | day
+      style = "moon", -- storm | night | moon | day
       transparent = false,
       terminal_colors = true,
       styles = {
         comments = { italic = true },
         keywords = { italic = true },
         sidebars = "dark",
-        floats   = "dark",
+        floats = "dark",
       },
     },
     config = function(_, opts)
@@ -108,18 +108,18 @@ return {
   -- ── kanagawa ────────────────────────────────────────────────────────────────
   {
     "rebelot/kanagawa.nvim",
-    lazy     = not is_active("kanagawa"),
+    lazy = not is_active("kanagawa"),
     priority = 1000,
     opts = {
-      compile        = false,
-      undercurl      = true,
-      commentStyle   = { italic = true },
-      keywordStyle   = { italic = true },
+      compile = false,
+      undercurl = true,
+      commentStyle = { italic = true },
+      keywordStyle = { italic = true },
       statementStyle = { bold = true },
-      transparent    = false,
+      transparent = false,
       terminalColors = true,
-      theme          = "wave",   -- wave | dragon | lotus
-      background     = { dark = "wave", light = "lotus" },
+      theme = "wave", -- wave | dragon | lotus
+      background = { dark = "wave", light = "lotus" },
     },
     config = function(_, opts)
       require("kanagawa").setup(opts)
@@ -132,15 +132,15 @@ return {
   -- ── rose-pine ───────────────────────────────────────────────────────────────
   {
     "rose-pine/neovim",
-    name     = "rose-pine",
-    lazy     = not is_active("rose-pine"),
+    name = "rose-pine",
+    lazy = not is_active("rose-pine"),
     priority = 1000,
     opts = {
-      variant      = "moon",   -- auto | main | moon | dawn
+      variant = "moon", -- auto | main | moon | dawn
       dark_variant = "moon",
       styles = {
-        bold         = true,
-        italic       = true,
+        bold = true,
+        italic = true,
         transparency = false,
       },
     },
@@ -151,5 +151,4 @@ return {
       end
     end,
   },
-
 }

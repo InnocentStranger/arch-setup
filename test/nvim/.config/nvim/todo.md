@@ -4,4 +4,3 @@
 2. telescope root directory change how in neovim?
 3. open oil in current file directory, open it in current working dir?
 4. add oil preview using C-p in readme of useful shorcuts
-

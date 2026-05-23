@@ -31,7 +31,7 @@ vim.keymap.set({ "n", "x" }, "<Leader>d", '"+d', { silent = true }) -- Copy to s
 -- UI & Windows
 vim.o.wrap = false
 vim.o.cursorline = true
-vim.o.signcolumn = "yes"
+vim.o.signcolumn = "yes:2"
 vim.o.splitright = true
 vim.o.splitbelow = true
 -- vim.opt.clipboard = "unnamedplus" -- Natively syncs Neovim clipboard with system clipboard
@@ -39,7 +39,7 @@ vim.o.splitbelow = true
 -- Autoread (Updates Neovim if file is changed externally, e.g., git branch swap)
 -- vim.o.autoread = true
 -- vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
-    -- command = "checktime",
+-- command = "checktime",
 -- })
 
 -- ========================================================================== --
@@ -58,15 +58,15 @@ vim.keymap.set("x", "<C-A-j>", ":m '>+1<CR>gv=gv", { silent = true, desc = "Move
 vim.keymap.set("x", "<C-A-k>", ":m '<-2<CR>gv=gv", { silent = true, desc = "Move selection up" })
 
 -- Tab creation
-vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>",       { desc = "New tab" })
-vim.keymap.set("n", "<leader>tc", "<cmd>tabclose<CR>",     { desc = "Close tab" })
-vim.keymap.set("n", "<leader>to", "<cmd>tabonly<CR>",      { desc = "Close other tabs" })
+vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "New tab" })
+vim.keymap.set("n", "<leader>tc", "<cmd>tabclose<CR>", { desc = "Close tab" })
+vim.keymap.set("n", "<leader>to", "<cmd>tabonly<CR>", { desc = "Close other tabs" })
 
 -- Normal mode: <leader>/ triggers gcc (Line comment)
-vim.keymap.set('n', '<leader>/', 'gcc', { remap = true, desc = "Toggle Comment Line" })
+vim.keymap.set("n", "<leader>/", "gcc", { remap = true, desc = "Toggle Comment Line" })
 
 -- Visual mode: <leader>/ triggers gc (Selection comment)
-vim.keymap.set('v', '<leader>/', 'gc', { remap = true, desc = "Toggle Comment Selection" })
+vim.keymap.set("v", "<leader>/", "gc", { remap = true, desc = "Toggle Comment Selection" })
 
 -- Command-line menu navigation (C-j,k overridden by blink.nvim)
 -- vim.keymap.set("c", "<C-j>", "<C-n>", { desc = "Command line next item/history" })
@@ -77,19 +77,24 @@ vim.keymap.set('v', '<leader>/', 'gc', { remap = true, desc = "Toggle Comment Se
 -- ========================================================================== --
 -- Function to copy current diagnostic message to system clipboard
 local function copy_diagnostic_to_clipboard()
-    local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
-    if #diagnostics > 0 then
-        local messages = {}
-        for _, diagnostic in ipairs(diagnostics) do
-            table.insert(messages, diagnostic.message)
-        end
-        local msg = table.concat(messages, "\n")
-        vim.fn.setreg("+", msg)
-        print("Diagnostic messages copied to clipboard!")
-    else
-        print("No diagnostic messages found under the cursor.")
+  local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
+  if #diagnostics > 0 then
+    local messages = {}
+    for _, diagnostic in ipairs(diagnostics) do
+      table.insert(messages, diagnostic.message)
     end
+    local msg = table.concat(messages, "\n")
+    vim.fn.setreg("+", msg)
+    print("Diagnostic messages copied to clipboard!")
+  else
+    print("No diagnostic messages found under the cursor.")
+  end
 end
 
 -- Map Custom Diagnostic function
-vim.keymap.set("n", "<leader>cd", copy_diagnostic_to_clipboard, { silent = true, desc = "Copy Diagnostic to Clipboard" })
+vim.keymap.set(
+  "n",
+  "<leader>cd",
+  copy_diagnostic_to_clipboard,
+  { silent = true, desc = "Copy Diagnostic to Clipboard" }
+)

@@ -17,13 +17,13 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    lazy     = false,
+    lazy = false,
     priority = 90,
   },
 
   {
     "mason-org/mason-lspconfig.nvim",
-    lazy     = false,
+    lazy = false,
     priority = 80,
     dependencies = {
       "mason-org/mason.nvim",
@@ -50,6 +50,10 @@ return {
         "jsonls",
         "yamlls",
         "marksman",
+
+        -- Python and Go
+        "basedpyright",
+        "gopls",
       },
 
       -- Calls vim.lsp.enable() for every installed server automatically.

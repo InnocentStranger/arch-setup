@@ -2,15 +2,15 @@
 return {
   {
     "saghen/blink.cmp",
-    version  = "1.*",
-    lazy     = false, -- Blink should load immediately to handle its internal caching
+    version = "1.*",
+    lazy = false, -- Blink should load immediately to handle its internal caching
     dependencies = {
       "rafamadriz/friendly-snippets",
     },
     opts = {
       keymap = {
-        preset    = "default",
-        ["<CR>"]  = { "accept", "fallback" },
+        preset = "default",
+        ["<CR>"] = { "accept", "fallback" },
         ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
         ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
         ["<C-j>"] = { "select_next", "fallback" },
@@ -18,7 +18,7 @@ return {
       },
 
       appearance = {
-        nerd_font_variant       = "mono",
+        nerd_font_variant = "mono",
         use_nvim_cmp_as_default = true,
       },
 
@@ -27,7 +27,7 @@ return {
           auto_show = true,
           draw = {
             treesitter = { "lsp" },
-            columns    = {
+            columns = {
               { "kind_icon" },
               { "label", "label_description", gap = 1 },
               { "kind" },
@@ -35,19 +35,19 @@ return {
           },
         },
         documentation = {
-          auto_show          = true,
+          auto_show = true,
           auto_show_delay_ms = 300,
         },
         ghost_text = { enabled = false },
-        accept     = { auto_brackets = { enabled = true } },
+        accept = { auto_brackets = { enabled = true } },
       },
 
       sources = {
         default = { "lazydev", "lsp", "path", "snippets", "buffer" },
         providers = {
           lazydev = {
-            name         = "LazyDev",
-            module       = "lazydev.integrations.blink",
+            name = "LazyDev",
+            module = "lazydev.integrations.blink",
             score_offset = 100, -- Pushes Neovim API suggestions to the top
           },
           buffer = {
@@ -62,12 +62,12 @@ return {
 
       signature = {
         enabled = true,
-        window  = { border = "rounded" },
+        window = { border = "rounded" },
       },
 
       cmdline = {
         completion = {
-            menu = { auto_show = true },
+          menu = { auto_show = true },
         },
         keymap = {
           preset = "cmdline",
@@ -79,6 +79,6 @@ return {
       },
     },
     -- Allows other plugins to safely inject their own completion sources
-    opts_extend = { "sources.default" }
+    opts_extend = { "sources.default" },
   },
 }

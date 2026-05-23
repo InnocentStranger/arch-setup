@@ -34,14 +34,15 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-
       -- ── 1. Global capabilities ──────────────────────────────────────────────
       -- Applied to every LSP server via the "*" wildcard.
       -- blink.cmp must be loaded before any server attaches (lazy=false).
       vim.lsp.config("*", {
         capabilities = (function()
           local ok, blink = pcall(require, "blink.cmp")
-          if ok then return blink.get_lsp_capabilities() end
+          if ok then
+            return blink.get_lsp_capabilities()
+          end
           return vim.lsp.protocol.make_client_capabilities()
         end)(),
       })
@@ -51,12 +52,14 @@ return {
         group = vim.api.nvim_create_augroup("UserLspAttach", { clear = true }),
         callback = function(event)
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if not client then return end
+          if not client then
+            return
+          end
 
           local map = function(keys, func, desc, mode)
             vim.keymap.set(mode or "n", keys, func, {
               buffer = event.buf,
-              desc   = "LSP: " .. desc,
+              desc = "LSP: " .. desc,
             })
           end
 
@@ -100,13 +103,13 @@ return {
             vim.api.nvim_clear_autocmds({ group = hl, buffer = event.buf })
 
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-              buffer   = event.buf,
-              group    = hl,
+              buffer = event.buf,
+              group = hl,
               callback = vim.lsp.buf.document_highlight,
             })
             vim.api.nvim_create_autocmd("CursorMoved", {
-              buffer   = event.buf,
-              group    = hl,
+              buffer = event.buf,
+              group = hl,
               callback = vim.lsp.buf.clear_references,
             })
           end
@@ -138,7 +141,6 @@ return {
           if client:supports_method("textDocument/formatting") then
             vim.bo[event.buf].formatexpr = "v:lua.vim.lsp.formatexpr()"
           end
-
         end,
       })
     end,
