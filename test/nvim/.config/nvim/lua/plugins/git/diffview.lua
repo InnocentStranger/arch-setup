@@ -1,4 +1,4 @@
--- lua/plugins/diffview.lua
+-- lua/plugins/git/diffview.lua
 --
 -- ─── WHY diffview.nvim ────────────────────────────────────────────────────────
 --

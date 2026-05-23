@@ -29,7 +29,7 @@ return {
       require("tiny-inline-diagnostic").setup(opts)
       -- Disable default virtual_text — tiny-inline-diagnostic owns this now.
       -- This must come after setup(), not before.
-      vim.diagnostic.config({ virtual_text = false })
+      vim.diagnostic.config({ virtual_text = false, signs = false })
     end,
   },
 }

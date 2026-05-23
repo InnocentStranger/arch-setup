@@ -1,4 +1,4 @@
--- lua/plugins/git.lua
+-- lua/plugins/git/gitsigns.lua
 
 return {
 

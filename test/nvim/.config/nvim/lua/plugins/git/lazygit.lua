@@ -1,4 +1,4 @@
--- lua/plugins/lazygit.lua
+-- lua/plugins/git/lazygit.lua
 --
 -- lazygit.nvim — A seamless bridge between Neovim and the LazyGit terminal UI.
 -- Allows you to manage commits, rebase, and stash without ever leaving your editor.
