@@ -1,173 +1,118 @@
 -- lua/plugins/git/gitsigns.lua
 
 return {
+  "lewis6991/gitsigns.nvim",
+  event = "BufReadPre",
+  opts = {
+    signs = {
+      add = { text = " +" },
+      change = { text = " ~" },
+      delete = { text = " -" },
+      topdelete = { text = " -" },
+      changedelete = { text = " ~" },
+      untracked = { text = " ?" },
+    },
+    signs_staged = {
+      add = { text = " ┃" },
+      change = { text = " ┃" },
+      delete = { text = " ┃" },
+      topdelete = { text = " ┃" },
+      changedelete = { text = " ┃" },
+      untracked = { text = " ┃" },
+    },
+    signs_staged_enable = true,
+    signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
+    numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+    linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+    word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
+    watch_gitdir = {
+      follow_files = true,
+    },
+    auto_attach = true,
+    attach_to_untracked = false,
+    current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+    current_line_blame_opts = {
+      virt_text = true,
+      virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
+      delay = 1000,
+      ignore_whitespace = false,
+      virt_text_priority = 100,
+      use_focus = true,
+    },
+    current_line_blame_formatter = "<author>, <author_time:%R> - <summary>",
+    blame_formatter = nil, -- Use default
+    sign_priority = 6,
+    update_debounce = 100,
+    status_formatter = nil, -- Use default
+    max_file_length = 40000, -- Disable if file is longer than this (in lines)
+    preview_config = {
+      -- Options passed to nvim_open_win
+      style = "minimal",
+      relative = "cursor",
+      row = 0,
+      col = 1,
+    },
+    on_attach = function(bufnr)
+      local gitsigns = require("gitsigns")
+      local map = function(mode, lhs, rhs, desc)
+        vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+      end
 
-  -- ────────────────────────────────────────────────────────────────────
-  -- 1. GITSIGNS — gutter indicators, blame, hunk operations
-  -- Always-on, attaches to every git buffer automatically
-  -- ────────────────────────────────────────────────────────────────────
-  {
-    "lewis6991/gitsigns.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    opts = {
-      signs = {
-        add = { text = "▎" },
-        change = { text = "▎" },
-        delete = { text = "" },
-        topdelete = { text = "" },
-        changedelete = { text = "▎" },
-        untracked = { text = "▎" },
-      },
-      signs_staged = {
-        add = { text = "▎" },
-        change = { text = "▎" },
-        delete = { text = "" },
-        topdelete = { text = "" },
-        changedelete = { text = "▎" },
-      },
-      signs_staged_enable = true,
-
-      -- CRITICAL: lower than LSP diagnostic default (10)
-      -- so diagnostics win the inner sign column slot
-      sign_priority = 6,
-
-      signcolumn = true,
-      numhl = false,
-      linehl = false,
-      word_diff = false,
-
-      current_line_blame = false,
-      current_line_blame_opts = {
-        virt_text = true,
-        virt_text_pos = "eol",
-        delay = 600,
-        -- higher number = beats inlay hints in virtual text priority
-        virt_text_priority = 100,
-      },
-      current_line_blame_formatter = "<author>, <author_time:%d %b %Y> • <summary>",
-
-      on_attach = function(buf)
-        local gs = package.loaded.gitsigns
-
-        local function map(mode, lhs, rhs, desc)
-          vim.keymap.set(mode, lhs, rhs, { buffer = buf, desc = desc })
+      -- Navigation
+      map("n", "]c", function()
+        if vim.wo.diff then
+          vim.cmd.normal({ "]c", bang = true })
+        else
+          gitsigns.nav_hunk("next")
         end
+      end)
 
-        -- Navigate hunks (works in diff mode too)
-        map("n", "]h", function()
-          if vim.wo.diff then
-            vim.cmd.normal({ "]c", bang = true })
-          else
-            gs.nav_hunk("next")
-          end
-        end, "Next Hunk")
+      map("n", "[c", function()
+        if vim.wo.diff then
+          vim.cmd.normal({ "[c", bang = true })
+        else
+          gitsigns.nav_hunk("prev")
+        end
+      end)
 
-        map("n", "[h", function()
-          if vim.wo.diff then
-            vim.cmd.normal({ "[c", bang = true })
-          else
-            gs.nav_hunk("prev")
-          end
-        end, "Prev Hunk")
+      -- Actions
+      map("n", "<leader>hs", gitsigns.stage_hunk)
+      map("n", "<leader>hr", gitsigns.reset_hunk)
 
-        map("n", "]H", function()
-          gs.nav_hunk("last")
-        end, "Last Hunk")
-        map("n", "[H", function()
-          gs.nav_hunk("first")
-        end, "First Hunk")
+      map("v", "<leader>hs", function()
+        gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+      end)
 
-        -- Hunk staging & resetting
-        map({ "n", "v" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", "Stage Hunk")
-        map({ "n", "v" }, "<leader>ghr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
-        map("n", "<leader>ghS", gs.stage_buffer, "Stage Buffer")
-        map("n", "<leader>ghR", gs.reset_buffer, "Reset Buffer")
-        map("n", "<leader>ghu", gs.undo_stage_hunk, "Undo Stage Hunk")
+      map("v", "<leader>hr", function()
+        gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+      end)
 
-        -- Diff current file against index (opens Neovim split diff)
-        map("n", "<leader>ghd", gs.diffthis, "Diff This (index)")
-        map("n", "<leader>ghD", function()
-          gs.diffthis("~")
-        end, "Diff This (last commit)")
+      map("n", "<leader>hS", gitsigns.stage_buffer)
+      map("n", "<leader>hR", gitsigns.reset_buffer)
+      map("n", "<leader>hp", gitsigns.preview_hunk)
+      map("n", "<leader>hi", gitsigns.preview_hunk_inline)
 
-        -- Preview hunk inline float
-        map("n", "<leader>ghp", gs.preview_hunk, "Preview Hunk")
+      map("n", "<leader>hb", function()
+        gitsigns.blame_line({ full = true })
+      end)
 
-        -- Toggle blame line
-        map("n", "<leader>gb", gs.toggle_current_line_blame, "Toggle Line Blame")
+      map("n", "<leader>hd", gitsigns.diffthis)
 
-        -- Text object: select hunk with ih in operator/visual mode
-        map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", "Select Hunk (text obj)")
-      end,
-    },
-  },
+      map("n", "<leader>hD", function()
+        gitsigns.diffthis("~")
+      end)
 
-  -- ────────────────────────────────────────────────────────────────────
-  -- 2. LAZYGIT.NVIM — full git panel in a float
-  -- Requires lazygit binary: https://github.com/jesseduffield/lazygit
-  -- Install: brew install lazygit / pacman -S lazygit / etc.
-  -- ────────────────────────────────────────────────────────────────────
-  {
-    "kdheepak/lazygit.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    cmd = {
-      "LazyGit",
-      "LazyGitConfig",
-      "LazyGitCurrentFile",
-      "LazyGitFilter",
-      "LazyGitFilterCurrentFile",
-    },
-    keys = {
-      { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
-      { "<leader>gG", "<cmd>LazyGitCurrentFile<cr>", desc = "LazyGit (current file)" },
-    },
-  },
+      map("n", "<leader>hQ", function()
+        gitsigns.setqflist("all")
+      end)
+      map("n", "<leader>hq", gitsigns.setqflist)
 
-  -- ────────────────────────────────────────────────────────────────────
-  -- 3. DIFFVIEW — Neovim-native side-by-side diff + file history + conflicts
-  -- Using the maintained fork (original stale since Aug 2024)
-  -- Drop this block if you're happy doing all diffs inside lazygit
-  -- ────────────────────────────────────────────────────────────────────
-  {
-    "dlyongemallo/diffview.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    cmd = {
-      "DiffviewOpen",
-      "DiffviewClose",
-      "DiffviewToggleFiles",
-      "DiffviewFileHistory",
-    },
-    keys = {
-      {
-        "<leader>gd",
-        function()
-          -- toggle: open if no diffview active, close if one is
-          if next(require("diffview.lib").views) == nil then
-            vim.cmd("DiffviewOpen")
-          else
-            vim.cmd("DiffviewClose")
-          end
-        end,
-        desc = "Toggle Diffview",
-      },
-      { "<leader>gfh", "<cmd>DiffviewFileHistory %<cr>", desc = "File History (current)" },
-      { "<leader>gFH", "<cmd>DiffviewFileHistory<cr>", desc = "File History (repo)" },
-    },
-    opts = {
-      enhanced_diff_hl = true, -- word-level diff highlighting inside hunks
-      use_icons = true,
-      view = {
-        default = {
-          -- side-by-side layout (standard)
-          layout = "diff2_horizontal",
-          winbar_info = true,
-        },
-        merge_tool = {
-          -- three-way for conflict resolution
-          layout = "diff3_mixed",
-          disable_diagnostics = true,
-        },
-      },
-    },
+      -- Toggles
+      map("n", "<leader>tb", gitsigns.toggle_current_line_blame)
+      map("n", "<leader>tw", gitsigns.toggle_word_diff)
+
+      -- Text object
+      map({ "o", "x" }, "ih", gitsigns.select_hunk)
+    end,
   },
 }
