@@ -1,36 +1,29 @@
--- ========================================================================== --
---                               LEADER KEY                                   --
--- ========================================================================== --
-vim.g.mapleader = " "
+vim.g.mapleader = " " -- leader key
 
 -- ========================================================================== --
---                                 OPTIONS                                    --
+-- OPTIONS                                                                    --
 -- ========================================================================== --
--- Line Numbers
-vim.o.number = true
-vim.o.relativenumber = true
+vim.o.number = true -- line number
+vim.o.relativenumber = true -- relative line number
+vim.o.wrap = false -- do not wrap lines by default
+vim.o.cursorline = true -- highlight current line
+vim.o.scrolloff = 999 -- keep cursor middle
+vim.o.sidescrolloff = 15 -- keep 10 lines to left/right of cursor
 
--- Mouse Control
-vim.o.mouse = "a"
+vim.o.mouse = "a" -- enable mouse
 
--- Indentation (Sane defaults, overridden by .editorconfig or tools automatically)
-vim.o.tabstop = 4
-vim.o.shiftwidth = 4
-vim.o.expandtab = true
-vim.o.smartindent = true
+vim.o.tabstop = 4 -- tabwidth
+vim.o.shiftwidth = 4 -- indent width
+vim.o.softtabstop = 4 -- soft tab stop not tabs on tab/backspace
+vim.o.expandtab = true -- use spaces instead of tabs
+vim.o.smartindent = true -- smart auto-indent
+vim.o.autoindent = true -- copy indent from current line
 
 -- Search Behavior
-vim.o.ignorecase = true
-vim.o.smartcase = true
-
--- copy & paste
-vim.keymap.set({ "n", "x" }, "<Leader>y", '"+y', { silent = true }) -- Copy to system clipboard in normal/visual mode
-vim.keymap.set({ "n", "x" }, "<Leader>p", '"+p', { silent = true }) -- Paste from system clipboard in normal/visual mode
-vim.keymap.set({ "n", "x" }, "<Leader>d", '"+d', { silent = true }) -- Copy to system clipboard in normal/visual mode
+vim.o.ignorecase = true -- case insensitive search
+vim.o.smartcase = true -- case sensitive if uppercase in string
 
 -- UI & Windows
-vim.o.wrap = false
-vim.o.cursorline = true
 vim.o.signcolumn = "yes"
 vim.o.splitright = true
 vim.o.splitbelow = true
@@ -41,60 +34,3 @@ vim.o.splitbelow = true
 -- vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
 -- command = "checktime",
 -- })
-
--- ========================================================================== --
---                                KEYMAPS                                     --
--- ========================================================================== --
--- Split Windows Manually
-vim.keymap.set("n", "<leader>sv", "<cmd>vsplit<CR>", { desc = "Split window vertically" })
-vim.keymap.set("n", "<leader>sh", "<cmd>split<CR>", { desc = "Split window horizontally" })
-vim.keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" })
-vim.keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" })
-
--- Move Lines Up/Down (Ctrl + Alt + j/k)
-vim.keymap.set("n", "<C-A-j>", ":m .+1<CR>==", { silent = true, desc = "Move line down" })
-vim.keymap.set("n", "<C-A-k>", ":m .-2<CR>==", { silent = true, desc = "Move line up" })
-vim.keymap.set("x", "<C-A-j>", ":m '>+1<CR>gv=gv", { silent = true, desc = "Move selection down" })
-vim.keymap.set("x", "<C-A-k>", ":m '<-2<CR>gv=gv", { silent = true, desc = "Move selection up" })
-
--- Tab creation
-vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "New tab" })
-vim.keymap.set("n", "<leader>tc", "<cmd>tabclose<CR>", { desc = "Close tab" })
-vim.keymap.set("n", "<leader>to", "<cmd>tabonly<CR>", { desc = "Close other tabs" })
-
--- Normal mode: <leader>/ triggers gcc (Line comment)
-vim.keymap.set("n", "<leader>/", "gcc", { remap = true, desc = "Toggle Comment Line" })
-
--- Visual mode: <leader>/ triggers gc (Selection comment)
-vim.keymap.set("v", "<leader>/", "gc", { remap = true, desc = "Toggle Comment Selection" })
-
--- Command-line menu navigation (C-j,k overridden by blink.nvim)
--- vim.keymap.set("c", "<C-j>", "<C-n>", { desc = "Command line next item/history" })
--- vim.keymap.set("c", "<C-k>", "<C-p>", { desc = "Command line prev item/history" })
-
--- ========================================================================== --
---                           CUSTOM FUNCTIONS                                 --
--- ========================================================================== --
--- Function to copy current diagnostic message to system clipboard
-local function copy_diagnostic_to_clipboard()
-  local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
-  if #diagnostics > 0 then
-    local messages = {}
-    for _, diagnostic in ipairs(diagnostics) do
-      table.insert(messages, diagnostic.message)
-    end
-    local msg = table.concat(messages, "\n")
-    vim.fn.setreg("+", msg)
-    print("Diagnostic messages copied to clipboard!")
-  else
-    print("No diagnostic messages found under the cursor.")
-  end
-end
-
--- Map Custom Diagnostic function
-vim.keymap.set(
-  "n",
-  "<leader>cd",
-  copy_diagnostic_to_clipboard,
-  { silent = true, desc = "Copy Diagnostic to Clipboard" }
-)

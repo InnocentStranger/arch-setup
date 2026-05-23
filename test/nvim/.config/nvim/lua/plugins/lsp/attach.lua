@@ -73,6 +73,36 @@ return {
           -- gD: declaration (not in Neovim defaults)
           map("gD", vim.lsp.buf.declaration, "Go to declaration")
 
+          -- ── Copy Diagnostics ─────────────────────────────────────────────────────
+          map("<leader>cy", function()
+            -- Get current line number (0-indexed for the API)
+            local line = vim.api.nvim_win_get_cursor(0)[1] - 1
+
+            -- Fetch all diagnostics strictly for the current line
+            local diags = vim.diagnostic.get(event.buf, { lnum = line })
+
+            if vim.tbl_isempty(diags) then
+              vim.notify("No diagnostics found on current line", vim.log.levels.INFO)
+              return
+            end
+
+            -- Collect messages (filters out empty strings, merges multiple messages)
+            local messages = {}
+            for _, diag in ipairs(diags) do
+              if diag.message and diag.message ~= "" then
+                table.insert(messages, diag.message)
+              end
+            end
+
+            local result = table.concat(messages, "\n\n")
+
+            -- Copy to system clipboard register (+)
+            vim.fn.setreg("+", result)
+
+            -- Feedback notice
+            vim.notify("Copied line diagnostics to clipboard!", vim.log.levels.INFO)
+          end, "Yank line diagnostics")
+
           -- ── Inlay hints ─────────────────────────────────────────────────────
           -- Grey inline annotations: inferred types, parameter names.
           -- Enabled by default; toggle with <leader>ch.

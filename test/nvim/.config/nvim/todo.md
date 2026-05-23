@@ -8,3 +8,4 @@
 5. add this in shortcuts list to remember
    - C-u to swipe up
    - C-d to swipe down
+6. add color preview
