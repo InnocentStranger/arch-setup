@@ -31,7 +31,7 @@ vim.keymap.set({ "n", "x" }, "<Leader>d", '"+d', { silent = true }) -- Copy to s
 -- UI & Windows
 vim.o.wrap = false
 vim.o.cursorline = true
-vim.o.signcolumn = "yes:2"
+vim.o.signcolumn = "yes"
 vim.o.splitright = true
 vim.o.splitbelow = true
 -- vim.opt.clipboard = "unnamedplus" -- Natively syncs Neovim clipboard with system clipboard
