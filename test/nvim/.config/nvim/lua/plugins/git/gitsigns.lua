@@ -100,9 +100,15 @@ return {
       end, "Diff Against Last Commit")
 
       -- Quickfix
-      map("n", "<leader>hq", gitsigns.setqflist, "Hunks to Quickfix")
+
+      -- 0 targets the current buffer only
+      map("n", "<leader>hq", function()
+        gitsigns.setqflist(0, { open = false })
+      end, "Hunks to Quickfix")
+
+      -- "all" targets the entire repository/workspace
       map("n", "<leader>hQ", function()
-        gitsigns.setqflist("all")
+        gitsigns.setqflist("all", { open = false })
       end, "All Hunks to Quickfix")
 
       -- Toggles (Moved under the global UI toggle prefix <leader>t)

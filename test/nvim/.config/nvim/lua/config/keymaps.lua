@@ -49,3 +49,24 @@ vim.keymap.set("v", "<leader>/", "gc", { remap = true, desc = "Toggle Comment Se
 -- Command-line menu navigation (C-j,k overridden by blink.nvim)
 -- vim.keymap.set("c", "<C-j>", "<C-n>", { desc = "Command line next item/history" })
 -- vim.keymap.set("c", "<C-k>", "<C-p>", { desc = "Command line prev item/history" })
+
+-- lua/core/keymaps.lua
+
+-- ─── NATIVE QUICKFIX TOGGLE ───────────────────────────────────────────────────
+vim.keymap.set("n", "<leader>q", function()
+  -- Ask Neovim for the window ID of the quickfix list in the current tab
+  local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
+
+  if qf_winid ~= 0 then
+    -- If the ID is not 0, the window is open. Close it.
+    vim.cmd("cclose")
+  else
+    -- If it is 0, the window is closed.
+    -- Check if it actually has items inside it before opening.
+    if not vim.tbl_isempty(vim.fn.getqflist()) then
+      vim.cmd("copen")
+    else
+      vim.notify("Quickfix list is empty", vim.log.levels.WARN)
+    end
+  end
+end, { desc = "Toggle Native Quickfix" })
