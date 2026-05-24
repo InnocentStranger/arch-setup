@@ -129,26 +129,6 @@ return {
         desc = "Help tags",
       },
       {
-        "<leader>fm",
-        b("man_pages"),
-        desc = "Man pages",
-      },
-      {
-        "<leader>fo",
-        b("vim_options"),
-        desc = "Vim options",
-      },
-      {
-        "<leader>fA",
-        b("autocommands"),
-        desc = "Autocommands",
-      },
-      {
-        "<leader>fH",
-        b("highlights"),
-        desc = "Highlight groups",
-      },
-      {
         '<leader>"',
         b("registers"),
         desc = "Registers",
@@ -162,11 +142,6 @@ return {
         "<leader>fq",
         b("quickfix"),
         desc = "Quickfix list",
-      },
-      {
-        "<leader>fl",
-        b("loclist"),
-        desc = "Location list",
       },
       -- Spell suggest as compact dropdown — no preview needed for a word list
       { "z=", b("spell_suggest"), desc = "Spell suggest" },
