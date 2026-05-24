@@ -7,13 +7,13 @@ return {
   keys = {
     -- workspace diagnostics
     {
-      "<leader>xx",
+      "<leader>xX",
       "<cmd>Trouble diagnostics toggle<cr>",
       desc = "Diagnostics (Trouble)",
     },
     -- buffer diagnostics only
     {
-      "<leader>xX",
+      "<leader>xx",
       "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
       desc = "Buffer Diagnostics (Trouble)",
     },

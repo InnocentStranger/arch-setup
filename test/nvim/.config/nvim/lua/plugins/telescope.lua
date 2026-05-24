@@ -243,9 +243,9 @@ return {
               ["<C-p>"] = actions.cycle_history_prev,
               -- Send only Tab-selected items to quickfix (intentional, not all results)
               -- Use <Tab> to mark items first, then <C-q>
-              ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+              ["<C-q>"] = actions.send_selected_to_qflist,
               -- Send ALL results to quickfix (no selection needed)
-              ["<M-q>"] = actions.send_to_qflist + actions.open_qflist,
+              ["<M-q>"] = actions.send_to_qflist,
               -- Open in splits / new tab
               ["<C-s>"] = actions.select_horizontal,
               ["<C-v>"] = actions.select_vertical,
