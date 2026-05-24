@@ -58,61 +58,59 @@ return {
         vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
       end
 
-      -- Navigation
-      map("n", "]c", function()
+      -- Navigation (Enforcing the ]h and [h Hunk system)
+      map("n", "]h", function()
         if vim.wo.diff then
           vim.cmd.normal({ "]c", bang = true })
         else
           gitsigns.nav_hunk("next")
         end
-      end)
+      end, "Next Hunk")
 
-      map("n", "[c", function()
+      map("n", "[h", function()
         if vim.wo.diff then
           vim.cmd.normal({ "[c", bang = true })
         else
           gitsigns.nav_hunk("prev")
         end
-      end)
+      end, "Prev Hunk")
 
-      -- Actions
-      map("n", "<leader>hs", gitsigns.stage_hunk)
-      map("n", "<leader>hr", gitsigns.reset_hunk)
-
+      -- Actions (<leader>h prefix for "Hunk")
+      map("n", "<leader>hs", gitsigns.stage_hunk, "Stage Hunk")
+      map("n", "<leader>hr", gitsigns.reset_hunk, "Reset Hunk")
       map("v", "<leader>hs", function()
         gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-      end)
-
+      end, "Stage Selection")
       map("v", "<leader>hr", function()
         gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-      end)
+      end, "Reset Selection")
 
-      map("n", "<leader>hS", gitsigns.stage_buffer)
-      map("n", "<leader>hR", gitsigns.reset_buffer)
-      map("n", "<leader>hp", gitsigns.preview_hunk)
-      map("n", "<leader>hi", gitsigns.preview_hunk_inline)
+      map("n", "<leader>hS", gitsigns.stage_buffer, "Stage Entire Buffer")
+      map("n", "<leader>hR", gitsigns.reset_buffer, "Reset Entire Buffer")
+      map("n", "<leader>hp", gitsigns.preview_hunk, "Preview Hunk (Float)")
+      map("n", "<leader>hi", gitsigns.preview_hunk_inline, "Preview Hunk (Inline)")
 
+      -- Blame & Diff
       map("n", "<leader>hb", function()
         gitsigns.blame_line({ full = true })
-      end)
-
-      map("n", "<leader>hd", gitsigns.diffthis)
-
+      end, "Blame Line")
+      map("n", "<leader>hd", gitsigns.diffthis, "Diff Against Index")
       map("n", "<leader>hD", function()
         gitsigns.diffthis("~")
-      end)
+      end, "Diff Against Last Commit")
 
+      -- Quickfix
+      map("n", "<leader>hq", gitsigns.setqflist, "Hunks to Quickfix")
       map("n", "<leader>hQ", function()
         gitsigns.setqflist("all")
-      end)
-      map("n", "<leader>hq", gitsigns.setqflist)
+      end, "All Hunks to Quickfix")
 
-      -- Toggles
-      map("n", "<leader>tb", gitsigns.toggle_current_line_blame)
-      map("n", "<leader>tw", gitsigns.toggle_word_diff)
+      -- Toggles (Moved under the global UI toggle prefix <leader>t)
+      map("n", "<leader>tb", gitsigns.toggle_current_line_blame, "Toggle Line Blame")
+      map("n", "<leader>tw", gitsigns.toggle_word_diff, "Toggle Word Diff")
 
-      -- Text object
-      map({ "o", "x" }, "ih", gitsigns.select_hunk)
+      -- Text object (Allows you to type 'dih' to delete inside a hunk)
+      map({ "o", "x" }, "ih", gitsigns.select_hunk, "Select Hunk")
     end,
   },
 }

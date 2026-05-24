@@ -2,11 +2,11 @@
 -- KEYMAPS                                                                    --
 -- ========================================================================== --
 
--- Split Windows Manually
-vim.keymap.set("n", "<leader>sv", "<cmd>vsplit<CR>", { desc = "Split window vertically" })
-vim.keymap.set("n", "<leader>sh", "<cmd>split<CR>", { desc = "Split window horizontally" })
-vim.keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" })
-vim.keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" })
+-- ─── WINDOW MANAGEMENT ────────────────────────────────────────────────────────
+vim.keymap.set("n", "<leader>wh", "<cmd>split<CR>", { desc = "Split window horizontally" })
+vim.keymap.set("n", "<leader>wv", "<cmd>vsplit<CR>", { desc = "Split window vertically" })
+vim.keymap.set("n", "<leader>we", "<C-w>=", { desc = "Make splits equal size" })
+vim.keymap.set("n", "<leader>wc", "<cmd>close<CR>", { desc = "Close current window" })
 
 -- Move Lines Up/Down (Ctrl + Alt + j/k)
 vim.keymap.set("n", "<C-A-j>", ":m .+1<CR>==", { silent = true, desc = "Move line down" })
@@ -14,11 +14,27 @@ vim.keymap.set("n", "<C-A-k>", ":m .-2<CR>==", { silent = true, desc = "Move lin
 vim.keymap.set("x", "<C-A-j>", ":m '>+1<CR>gv=gv", { silent = true, desc = "Move selection down" })
 vim.keymap.set("x", "<C-A-k>", ":m '<-2<CR>gv=gv", { silent = true, desc = "Move selection up" })
 
--- Tab creation
-vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "New tab" })
-vim.keymap.set("n", "<leader>tc", "<cmd>tabclose<CR>", { desc = "Close tab" })
-vim.keymap.set("n", "<leader>to", "<cmd>tabonly<CR>", { desc = "Close other tabs" })
+-- ─── TAB MANAGEMENT ───────────────────────────────────────────────────────────
+vim.keymap.set("n", "<leader><tab>", "<cmd>tabnew<CR>", { desc = "Create new tab" })
 
+-- ─── Window Movement ───────────────────────────────────────────────────────────
+vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Go to lower window" })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Go to upper window" })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
+
+-- Loop to create Alt+1 through Alt+9 keymaps for tab navigation
+for i = 1, 9 do
+  vim.keymap.set("n", "<M-" .. i .. ">", i .. "gt", { desc = "Go to tab " .. i })
+end
+
+-- ─── CLEAR SCREEN / HIGHLIGHTS ────────────────────────────────────────────────
+vim.keymap.set(
+  "n",
+  "<C-A-L>",
+  "<cmd>nohlsearch<CR><cmd>diffupdate<CR><cmd>normal! <C-l><CR>",
+  { desc = "Clear screen and search highlights" }
+)
 -- copy & paste
 vim.keymap.set({ "n", "x" }, "<Leader>y", '"+y', { silent = true }) -- Copy to system clipboard in normal/visual mode
 vim.keymap.set({ "n", "x" }, "<Leader>p", '"+p', { silent = true }) -- Paste from system clipboard in normal/visual mode
