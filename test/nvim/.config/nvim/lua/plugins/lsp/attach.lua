@@ -65,13 +65,9 @@ return {
 
           -- ── Keymaps not in Neovim defaults ──────────────────────────────────
 
-          -- gd: definition via telescope picker (not in Neovim defaults)
-          map("gd", function()
-            require("telescope.builtin").lsp_definitions()
-          end, "Go to definition")
-
-          -- gD: declaration (not in Neovim defaults)
-          map("gD", vim.lsp.buf.declaration, "Go to declaration")
+          map("grd", vim.lsp.buf.definition, "Go to Definition")
+          map("grD", vim.lsp.buf.declaration, "Go to Declaration")
+          map("grt", vim.lsp.buf.type_definition, "Go to Declaration")
 
           -- ── Copy Diagnostics ─────────────────────────────────────────────────────
           map("<leader>cy", function()
