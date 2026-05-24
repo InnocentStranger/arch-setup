@@ -31,14 +31,14 @@ return {
   -- Harpoon into memory until you actually press one of these keys.
   keys = {
     {
-      "<leader>af",
+      "<leader>a",
       function()
         require("harpoon"):list():add()
       end,
       desc = "Harpoon: Add file",
     },
     {
-      "<leader>om",
+      "<leader>m",
       function()
         local harpoon = require("harpoon")
         harpoon.ui:toggle_quick_menu(harpoon:list())
@@ -72,22 +72,6 @@ return {
         require("harpoon"):list():select(4)
       end,
       desc = "Harpoon: Navigate to file 4",
-    },
-
-    -- Optional: If you want to cycle through them without opening the menu
-    {
-      "<M-n>",
-      function()
-        require("harpoon"):list():next()
-      end,
-      desc = "Harpoon: Next file",
-    },
-    {
-      "<M-p>",
-      function()
-        require("harpoon"):list():prev()
-      end,
-      desc = "Harpoon: Previous file",
     },
   },
 }
