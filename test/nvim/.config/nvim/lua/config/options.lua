@@ -12,6 +12,12 @@ vim.o.sidescrolloff = 15 -- keep 10 lines to left/right of cursor
 
 vim.o.mouse = "a" -- enable mouse
 
+vim.opt.list = true
+vim.opt.listchars = vim.opt.listchars + {
+  space = "·",
+  trail = "·",
+}
+
 vim.o.tabstop = 4 -- tabwidth
 vim.o.shiftwidth = 4 -- indent width
 vim.o.softtabstop = 4 -- soft tab stop not tabs on tab/backspace
