@@ -23,24 +23,24 @@ return {
       "<cmd>Trouble symbols toggle focus=false<cr>",
       desc = "Symbols (Trouble)",
     },
-    -- LSP definitions, references, implementations
-    {
-      "<leader>cl",
-      "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-      desc = "LSP (Trouble)",
-    },
+    -- -- LSP definitions, references, implementations
+    -- {
+    --   "<leader>cl",
+    --   "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+    --   desc = "LSP (Trouble)",
+    -- },
     -- location list
-    {
-      "<leader>xL",
-      "<cmd>Trouble loclist toggle<cr>",
-      desc = "Location List (Trouble)",
-    },
+    -- {
+    --   "<leader>xL",
+    --   "<cmd>Trouble loclist toggle<cr>",
+    --   desc = "Location List (Trouble)",
+    -- },
     -- quickfix list
-    {
-      "<leader>xQ",
-      "<cmd>Trouble qflist toggle<cr>",
-      desc = "Quickfix List (Trouble)",
-    },
+    -- {
+    --   "<leader>xQ",
+    --   "<cmd>Trouble qflist toggle<cr>",
+    --   desc = "Quickfix List (Trouble)",
+    -- },
   },
   opts = {},
 }

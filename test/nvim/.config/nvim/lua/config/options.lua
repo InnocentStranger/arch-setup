@@ -34,9 +34,3 @@ vim.o.signcolumn = "yes"
 vim.o.splitright = true
 vim.o.splitbelow = true
 -- vim.opt.clipboard = "unnamedplus" -- Natively syncs Neovim clipboard with system clipboard
-
--- Autoread (Updates Neovim if file is changed externally, e.g., git branch swap)
--- vim.o.autoread = true
--- vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
--- command = "checktime",
--- })

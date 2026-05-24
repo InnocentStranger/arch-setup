@@ -18,7 +18,6 @@ return {
           "neogit-status",
           "DiffviewFiles",
           "DiffviewFileHistory",
-          "oil",
           "lazy",
           "mason",
         },

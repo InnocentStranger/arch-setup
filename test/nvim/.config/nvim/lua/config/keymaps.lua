@@ -50,8 +50,6 @@ vim.keymap.set("v", "<leader>/", "gc", { remap = true, desc = "Toggle Comment Se
 -- vim.keymap.set("c", "<C-j>", "<C-n>", { desc = "Command line next item/history" })
 -- vim.keymap.set("c", "<C-k>", "<C-p>", { desc = "Command line prev item/history" })
 
--- lua/core/keymaps.lua
-
 -- ─── NATIVE QUICKFIX TOGGLE ───────────────────────────────────────────────────
 vim.keymap.set("n", "<leader>q", function()
   -- Ask Neovim for the window ID of the quickfix list in the current tab
