@@ -54,12 +54,19 @@ return {
         -- Python and Go
         "basedpyright",
         "gopls",
+
+        -- Java
+        "jdtls",
       },
 
       -- Calls vim.lsp.enable() for every installed server automatically.
       -- To exclude a server managed by another plugin (e.g. rustaceanvim):
       --   automatic_enable = { exclude = { "rust_analyzer" } }
-      automatic_enable = true,
+      automatic_enable = {
+        exclude = {
+          "jdtls",
+        },
+      },
     },
   },
 }
