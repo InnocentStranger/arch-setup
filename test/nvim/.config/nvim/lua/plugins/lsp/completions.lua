@@ -10,10 +10,11 @@ return {
     opts = {
       keymap = {
         preset = "none",
-        ["<CR>"] = { "fallback" },
+        ["<CR>"] = { "accept", "fallback" },
         ["<Tab>"] = { "accept", "fallback" },
         ["<C-j>"] = { "select_next", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
+        ["<C-space>"] = { "show", "hide" },
       },
 
       appearance = {
