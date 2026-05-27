@@ -15,6 +15,7 @@ return {
         "typescript",
         "tsx",
         "html",
+        "latex",
         "css",
         "json",
         "yaml",
