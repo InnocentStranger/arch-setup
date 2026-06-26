@@ -76,7 +76,7 @@ return {
       -- ── Buffers ────────────────────────────────────────────────────────────────
       { "<leader>fb", b("buffers", { sort_mru = true, sort_lastused = true }), desc = "Buffers" },
       -- Quick buffer switch (like Ctrl+Tab in VSCode)
-      { "<leader><leader>", b("buffers", { sort_mru = true }), desc = "Switch buffer" },
+      -- { "<leader><leader>", b("buffers", { sort_mru = true }), desc = "Switch buffer" },
 
       -- ── LSP pickers (deliberate actions, NOT motion overrides) ────────────────
       -- These are "open a picker" keymaps that the user explicitly invokes.
