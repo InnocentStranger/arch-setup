@@ -1,0 +1,14 @@
+[Unit]
+Description=Elephant Service
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStartPre=/bin/sh -c 'while ! systemctl --user show-environment | grep -q WAYLAND_DISPLAY; do sleep 0.5; done'
+ExecStart=/usr/bin/elephant
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target

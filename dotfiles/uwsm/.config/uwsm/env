@@ -1,0 +1,17 @@
+# ~/.config/uwsm/env
+
+# --- Toolkit Backends (Ensures apps run natively on Wayland) ---
+export QT_QPA_PLATFORM="wayland;xcb"
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+export QT_AUTO_SCREEN_SCALE_FACTOR=1
+export GDK_BACKEND="wayland,x11,*"
+export MOZ_ENABLE_WAYLAND=1
+export OZONE_PLATFORM_HINT="auto"
+
+# --- Theming (Uniform look across GTK/Qt apps) ---
+export XCURSOR_SIZE=24
+export XCURSOR_THEME="Breeze_Dark"
+export GTK_THEME="Adwaita:dark"
+
+# --- Java Fix (Prevents grey screen issues in Java apps) ---
+export _JAVA_AWT_WM_NONREPARENTING=1
