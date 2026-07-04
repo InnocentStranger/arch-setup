@@ -1,0 +1,10 @@
+# ~/.config/walker/config.toml
+
+theme = "raycast"
+force_keyboard_focus = false    # Force keyboard focus to stay in Walker
+close_when_open = true          # Close if invoked while already open
+click_to_close = true           # Close when clicking outside content area
+selection_wrap = false          # Wrap list navigation at top/bottom
+disable_mouse = false           # Disable mouse on input and list
+debug = false                   # Enable debug output
+

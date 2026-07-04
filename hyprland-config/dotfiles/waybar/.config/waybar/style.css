@@ -1,0 +1,166 @@
+/* --- STORMY NIGHT & ACCENT PALETTE --- */
+@define-color base-transparent rgba(26, 27, 38, 0);
+@define-color pill-bg          #1a1b26;
+
+/* Text Visibility */
+@define-color text-pure-white  #ffffff;
+@define-color text-main        #c0caf5;
+
+/* Workspace Colors */
+@define-color ws-active-bg     #3b4261;
+@define-color ws-text-faded    #565f89;
+
+/* Accents */
+@define-color accent-cpu-temp  #7aa2f7;
+@define-color accent-mem       #bb9af7;
+@define-color accent-vol       #9ece6a;
+@define-color accent-net       #2ac3de;
+@define-color accent-bat       #e0af68;
+@define-color accent-alert     #f7768e;
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "JetBrainsMono Nerd Font", "FiraCode Nerd Font", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+  /* ZERO ANIMATIONS: Strict battery and rendering optimization */
+}
+
+window#waybar {
+  background: @base-transparent;
+  color: @text-main;
+}
+
+/* --- THE PILL CONTAINERS --- */
+/* Groups share the exact same outer geometry, forcing internal elements into one block */
+#workspaces,
+#clock,
+#group-hardware,
+#group-sysinfo,
+#power-profiles-daemon {
+  background-color: @pill-bg;
+  border-radius: 100px;
+  margin: 4px 6px;
+  padding: 2px 16px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+/* --- WORKSPACES --- */
+#workspaces {
+  padding: 2px 4px; /* Dense spacing constraint */
+}
+
+#workspaces button {
+  background-color: transparent;
+  color: @ws-text-faded;
+  padding: 0 6px; /* Dense spacing constraint */
+  margin: 0 1px; /* Dense spacing constraint */
+  border-radius: 100px;
+}
+
+#workspaces button.active {
+  background-color: @ws-active-bg;
+  color: @text-pure-white;
+}
+
+/* --- CLOCK --- */
+#clock {
+  color: @text-main;
+  font-weight: 700;
+}
+
+/* --- HARDWARE GROUP (Audio & Network) --- */
+#group-hardware {
+  padding: 2px 12px;
+}
+#wireplumber,
+#network {
+  background: transparent;
+  margin: 0;
+  border: none;
+}
+#wireplumber {
+  color: @accent-vol;
+  min-width: 65px;
+  padding: 0;
+}
+#wireplumber.muted {
+  color: @accent-alert;
+}
+#network {
+  color: @accent-net;
+  min-width: 135px;
+  padding: 0;
+}
+#network.disconnected {
+  color: @accent-alert;
+}
+
+/* --- UNIFIED SYSTEM INFO PANEL --- */
+/* The pill container itself handles the background/padding. */
+#group-sysinfo {
+  padding: 2px 14px;
+}
+
+/* Children are entirely stripped of structural CSS to form one solid block */
+#cpu,
+#temperature,
+#memory,
+#battery {
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+/* Fixed widths maintain spacing without using margins, preventing shifting */
+#cpu {
+  color: @accent-cpu-temp;
+  min-width: 65px;
+}
+#temperature {
+  color: @accent-cpu-temp;
+  min-width: 60px;
+}
+#temperature.critical {
+  color: @accent-alert;
+  font-weight: 800;
+}
+#memory {
+  color: @accent-mem;
+  min-width: 75px;
+}
+#battery {
+  color: @accent-bat;
+  min-width: 60px;
+}
+#battery.charging,
+#battery.plugged {
+  color: @accent-vol;
+}
+#battery.critical:not(.charging) {
+  color: @pill-bg;
+  background-color: @accent-alert;
+  border-radius: 100px;
+  /* Minimal internal padding just so the alert background doesn't clip the icon */
+  padding: 0 8px;
+}
+
+/* --- POWER PROFILES DAEMON (PPD) --- */
+#power-profiles-daemon {
+  padding: 2px 0;
+  min-width: 75px;
+}
+#power-profiles-daemon.performance {
+  color: @pill-bg;
+  background-color: @accent-alert;
+}
+#power-profiles-daemon.balanced {
+  color: @accent-net;
+}
+#power-profiles-daemon.power-saver {
+  color: @accent-vol;
+}
