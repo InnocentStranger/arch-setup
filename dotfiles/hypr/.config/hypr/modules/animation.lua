@@ -4,31 +4,29 @@
 
 hl.config({
   general = {
-    border_size = 5,
+    border_size = 1,
     col = {
-      -- Simple static color (Battery efficient)
-      active_border = "rgba(89b4faee)",
-      inactive_border = "rgba(45475aee)",
+      active_border = "rgba(b4b4b4ff)",
+      inactive_border = "rgba(181818ff)",
     },
   },
   decoration = {
-    rounding = 16,
-    rounding_power = 2,
+    rounding = 0,
 
     active_opacity = 1.0,
     inactive_opacity = 1.0,
 
     shadow = {
-      enabled = false, -- DISABLED: Removes rendering overhead for window shadows
+      enabled = false,
     },
 
     blur = {
-      enabled = false, -- DISABLED: Blur is the highest GPU tax in Hyprland
+      enabled = false,
     },
   },
 
   animations = {
-    enabled = true, -- We keep animations on, but optimize their execution below
+    enabled = true,
   },
 })
 -- ==============================================================================
