@@ -9,9 +9,9 @@ export MOZ_ENABLE_WAYLAND=1
 export OZONE_PLATFORM_HINT="auto"
 
 # --- Theming (Uniform look across GTK/Qt apps) ---
-export XCURSOR_SIZE=24
-export XCURSOR_THEME="Breeze_Dark"
-export GTK_THEME="Adwaita:dark"
+# export XCURSOR_SIZE=24
+# export XCURSOR_THEME="Breeze_Dark"
+# export GTK_THEME="Adwaita:dark"
 
 # --- Java Fix (Prevents grey screen issues in Java apps) ---
 export _JAVA_AWT_WM_NONREPARENTING=1

@@ -3,8 +3,7 @@
 ## Must Have
 
 - [x] hypridle
-- [x] hyprlock
-- [x] authentication agent - hyprpolkitagent
+- [x] hyprlock [x] authentication agent - hyprpolkitagent
 - [x] Notification Daemon - mako
 - [x] Desktop Portal - xdg-desktop-portal-hyprland
 - [x] pipewire, wireplumber

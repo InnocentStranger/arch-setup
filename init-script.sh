@@ -32,11 +32,24 @@ arch_pacman_packages=(
     # Screenshot Utils
     "grim"
     "slurp"
+    "satty"
     "mako" # notification daemon
+
+    # file-manager
+    "nautilus"
+    "gvfs"
+    "gvfs-mtp"
+    "gvfs-afc"
+    "file-roller"
+    "sushi"
+    "tumbler"
+    "ffmpegthumbnailer"
+    "poppler-glib"
+
+    "kitty"
 )
 
 paru_packages=(
-    "satty"
 )
 
 # Systemd Services
