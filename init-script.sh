@@ -4,6 +4,8 @@ set -euo pipefail
 [[ "${TRACE:-}" == "1" ]] && set -x
 
 arch_pacman_packages=(
+    "paru"
+    "stow"
     # login
     "sddm"
 
@@ -47,10 +49,22 @@ arch_pacman_packages=(
     "poppler-glib"
 
     "kitty"
+    "vesktop"
+    "spotify-launcher"
 )
 
 paru_packages=(
+    "sddm-astronaut-theme"
 )
+
+# Sddm Theme
+
+echo "Configuring SDDM Astronaut Theme..."
+sudo mkdir -p /etc/sddm.conf.d
+THEME_CONF="[Theme]
+Current=sddm-astronaut-theme"
+echo "$THEME_CONF" | sudo tee /etc/sddm.conf.d/theme.conf >/dev/null
+echo "SDDM configuration applied successfully!"
 
 # Systemd Services
 # pipewire

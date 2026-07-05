@@ -1,9 +1,10 @@
 # TODO For hyprland Desktop Environment
 
-- statusbar
-- settings app
-- osd for volume and brightness
-- theming
+- [ ] statusbar
+- [ ] settings app
+- [ ] osd for volume and brightness
+- [ ] theming
+- [ ] paru install script
 
 ## Statusbar
 
