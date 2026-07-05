@@ -34,7 +34,26 @@ hl.bind(
 )
 -- ── miscellaneous ──────────────────────────────────────────────────
 
--- ── screenshot ──────────────────────────────────────────────────
+hl.bind(
+  "SHIFT + Print",
+  hl.dsp.exec_cmd(
+    [[exec 200>/tmp/ss-region.lock; flock -n 200 || exit 0; grim -g "$(slurp)" - | satty -f - --early-exit --actions-on-enter="save-to-file,exit" --output-filename ~/Pictures/Screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png]]
+  )
+)
+
+hl.bind(
+  "ALT + Print",
+  hl.dsp.exec_cmd(
+    [[exec 200>/tmp/ss-window.lock; flock -n 200 || exit 0; grim -g "$(hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')" - | tee ~/Pictures/Screenshots/window-$(date +%Y%m%d-%H%M%S).png | wl-copy]]
+  )
+)
+
+hl.bind(
+  "Print",
+  hl.dsp.exec_cmd(
+    [[exec 200>/tmp/ss-monitor.lock; flock -n 200 || exit 0; grim -o "$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')" - | tee ~/Pictures/Screenshots/monitor-$(date +%Y%m%d-%H%M%S).png | wl-copy]]
+  )
+)
 
 -- ── Media & hardware keys ─────────────────────────────────────────────
 hl.bind(
