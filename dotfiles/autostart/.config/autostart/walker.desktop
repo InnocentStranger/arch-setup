@@ -5,5 +5,3 @@ Name=Walker Daemon
 Description=Starts Walker in background mode
 Exec=/usr/bin/walker --gapplication-service
 Terminal=false
-# This ensures UWSM correctly bridges it to graphical-session.target
-X-GNOME-Autostart-Phase=Desktop
