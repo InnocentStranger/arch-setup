@@ -59,6 +59,8 @@ arch_pacman_packages=(
     "starship"
     "tmux"
     "tree-sitter-cli"
+    "go"
+    "rustup"
 )
 
 sudo pacman -Syu --needed "${arch_pacman_packages[@]}" --noconfirm
@@ -103,11 +105,15 @@ cd "$(dirname "${BASH_SOURCE[0]}")/dotfiles"
 
 STOW_FOLDERS=(
     "bash"
+    "autostart"
+    "gtk"
     "hypr"
     "kitty"
     "mako"
+    "nvim"
     "starship"
     "systemd"
+    "themes"
     "tmux"
     "uwsm"
     "walker"
@@ -118,6 +124,23 @@ for folder in "${STOW_FOLDERS[@]}"; do
     echo "Stowing $folder..."
     stow -R -t "$HOME" "$folder"
 done
+
+# Install Node via nvm
+echo "Installing Node.js 22 via nvm..."
+source /usr/share/nvm/init-nvm.sh
+nvm install 22
+nvm alias default 22
+nvm use 22
+
+echo "Node version: $(node -v)"
+echo "npm version: $(npm -v)"
+
+# Install Rust via rustup
+echo "Setting up Rust via rustup..."
+rustup default stable
+
+echo "Rust version: $(rustc --version)"
+echo "Cargo version: $(cargo --version)"
 
 # 5. Enable Systemd User Services
 echo "Enabling and starting Wayland user services..."
