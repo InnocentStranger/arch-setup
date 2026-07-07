@@ -1,0 +1,3 @@
+auto_detect_launch_prefix = false
+launch_prefix = "uwsm app --"
+

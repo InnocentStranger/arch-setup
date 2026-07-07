@@ -61,6 +61,7 @@ arch_pacman_packages=(
     "tree-sitter-cli"
     "go"
     "rustup"
+    "openbsd-netcat"
 )
 
 sudo pacman -Syu --needed "${arch_pacman_packages[@]}" --noconfirm
@@ -118,6 +119,7 @@ STOW_FOLDERS=(
     "uwsm"
     "walker"
     "waybar"
+    "elephant"
 )
 
 for folder in "${STOW_FOLDERS[@]}"; do
