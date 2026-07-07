@@ -13,12 +13,7 @@
 
   // ===================== Workspaces =====================
   "hyprland/workspaces": {
-    "format": "{icon}",
-    "format-icons": {
-      "default": "",
-      "active": "",
-      "empty": "",
-    },
+    "format": "{id}",
     "persistent-workspaces": {
       "*": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     },
@@ -26,11 +21,9 @@
     "sort-by-number": true,
   },
 
-  // ===================== Clock =====================
-  // interval 60 = update once a minute (no seconds shown, no need to redraw every second)
   "clock": {
     "interval": 60,
-    "format": "{:%H:%M   %a %d %b}",
+    "format": "  {:%H:%M   %a %d %b}",
     "tooltip": false,
   },
 
@@ -59,9 +52,9 @@
   // Event-driven via pulse/wireplumber, not polled.
   "pulseaudio": {
     "format": "{icon}  {volume}%",
-    "format-muted": "  Muted",
+    "format-muted": "󰝟  Muted",
     "format-icons": {
-      "default": ["", "", ""],
+      "default": ["󰕿", "󰖀", "󰕾"],
     },
     "scroll-step": 5,
     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
