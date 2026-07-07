@@ -1,80 +1,83 @@
 {
   "layer": "top",
   "position": "top",
-  "height": 40,
-  "spacing": 0,
-  "margin-top": 8,
-  "margin-left": 12,
-  "margin-right": 12,
-  "margin-bottom": 0,
-  "exclusive": true,
+  "height": 32,
+  "spacing": 4,
+  "margin-top": 4,
+  "margin-left": 8,
+  "margin-right": 8,
 
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["clock"],
-  "modules-right": ["group/hardware", "battery", "power-profiles-daemon"],
+  "modules-right": ["network", "bluetooth", "pulseaudio", "battery"],
 
-  // --- LEFT MODULES ---
+  // ===================== Workspaces =====================
   "hyprland/workspaces": {
-    "format": "{name}",
-    "disable-scroll": true,
-    "all-outputs": true,
-    "active-only": false,
+    "format": "{icon}",
+    "format-icons": {
+      "default": "",
+      "active": "",
+      "empty": "",
+    },
     "persistent-workspaces": {
       "*": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     },
+    "on-click": "activate",
+    "sort-by-number": true,
   },
 
-  // --- CENTER MODULES ---
+  // ===================== Clock =====================
+  // interval 60 = update once a minute (no seconds shown, no need to redraw every second)
   "clock": {
-    "format": "  {:%H:%M     %A, %b %d}",
+    "interval": 60,
+    "format": "{:%H:%M   %a %d %b}",
     "tooltip": false,
   },
 
-  // --- RIGHT MODULES ---
-
-  // Hardware (Audio & Network)
-  "group/hardware": {
-    "orientation": "horizontal",
-    "modules": ["wireplumber", "network"],
-  },
-  "wireplumber": {
-    "format": "{icon} {volume:>3}%",
-    "format-muted": "  Muted",
-    "format-icons": ["", "", ""],
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-  },
+  // ===================== Network (Wi-Fi/Ethernet) =====================
+  // Event-driven via netlink, not polled.
   "network": {
-    "format-wifi": "  {essid}",
-    "format-ethernet": "  Wired",
-    "format-disconnected": "⚠  Offline",
-    "tooltip-format": "{ifname} via {gwaddr}",
-    "min-length": 15,
-    "max-length": 15,
+    "format-wifi": "  {essid}",
+    "format-ethernet": "󰈀  Wired",
+    "format-disconnected": "󰤮  Offline",
+    "format-linked": "󰈀  No IP",
+    "tooltip": false,
   },
 
-  // FORCED GROUPING: Unified System Info Panel
-  "battery": {
-    "interval": 60, // Checked once per minute
-    "states": {
-      "warning": 25,
-      "critical": 10,
-    },
-    "format": "{icon} {capacity:>3}%",
-    "format-charging": " {capacity:>3}%",
-    "format-plugged": " {capacity:>3}%",
-    "format-icons": ["", "", "", "", ""],
-    "tooltip-format": "Time to empty: {time}",
+  // ===================== Bluetooth =====================
+  // Event-driven via dbus, not polled.
+  "bluetooth": {
+    "format": "",
+    "format-connected": "  {device_alias}",
+    "format-connected-battery": "  {device_alias} ({device_battery_percentage}%)",
+    "format-disabled": "󰂲",
+    "format-off": "󰂲",
+    "tooltip": false,
   },
 
-  // PPD
-  "power-profiles-daemon": {
-    "format": "{icon}",
-    "tooltip": true,
+  // ===================== Volume =====================
+  // Event-driven via pulse/wireplumber, not polled.
+  "pulseaudio": {
+    "format": "{icon}  {volume}%",
+    "format-muted": "  Muted",
     "format-icons": {
-      "default": " Perf",
-      "performance": " Perf",
-      "balanced": " Bal",
-      "power-saver": " Eco",
+      "default": ["", "", ""],
     },
+    "scroll-step": 5,
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "tooltip": false,
+  },
+
+  // ===================== Battery =====================
+  // Event-driven via upower, not polled. No tooltip/hover per your spec.
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15,
+    },
+    "format": "{icon}  {capacity}%",
+    "format-charging": "  {capacity}%",
+    "format-icons": ["", "", "", "", ""],
+    "tooltip": false,
   },
 }

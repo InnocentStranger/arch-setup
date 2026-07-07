@@ -5,7 +5,8 @@ hl.window_rule({
 })
 
 hl.window_rule({
-  match = { class = "^(org.gnome.Nautilus)$" },
+  match = { class = "org.gnome.Nautilus" },
   float = true,
   size = { 1100, 750 },
+  rounding = 20,
 })

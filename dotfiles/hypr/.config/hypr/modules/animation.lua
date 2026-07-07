@@ -6,15 +6,15 @@ hl.config({
   general = {
     border_size = 1,
     col = {
-      active_border = "rgba(b4b4b4ff)",
-      inactive_border = "rgba(181818ff)",
+      active_border = "rgba(ffffff99)",
+      inactive_border = "rgba(2a2a2add)",
     },
   },
   decoration = {
     rounding = 0,
 
     active_opacity = 1.0,
-    inactive_opacity = 1.0,
+    inactive_opacity = 0.8,
 
     shadow = {
       enabled = false,
