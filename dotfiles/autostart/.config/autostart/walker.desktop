@@ -1,7 +1,0 @@
-# walker/.config/autostart/walker.desktop
-[Desktop Entry]
-Type=Application
-Name=Walker Daemon
-Description=Starts Walker in background mode
-Exec=/usr/bin/walker --gapplication-service
-Terminal=false

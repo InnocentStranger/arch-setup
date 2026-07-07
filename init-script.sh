@@ -106,20 +106,19 @@ cd "$(dirname "${BASH_SOURCE[0]}")/dotfiles"
 
 STOW_FOLDERS=(
     "bash"
-    "autostart"
+    # "autostart"
     "gtk"
     "hypr"
     "kitty"
     "mako"
     "nvim"
     "starship"
-    "systemd"
+    # "systemd"
     "themes"
     "tmux"
     "uwsm"
     "walker"
     "waybar"
-    "elephant"
 )
 
 for folder in "${STOW_FOLDERS[@]}"; do
@@ -156,8 +155,7 @@ systemctl --user enable hyprpaper.service
 systemctl --user enable waybar.service
 systemctl --user enable --now waybar.service
 
-# Enable custom backend service (Walker is now handled via autostart .desktop)
-systemctl --user enable elephant.service
+# Elephant & Walker run as uwsm app -- instead of systemd native service
 
 echo "======================================================="
 echo "Setup Complete!"
