@@ -152,6 +152,7 @@ systemctl --user enable hyprpolkitagent.service
 systemctl --user enable hypridle.service
 systemctl --user enable hyprpaper.service
 systemctl --user enable waybar.service
+systemctl --user enable --now waybar.service
 
 # Enable custom backend service (Walker is now handled via autostart .desktop)
 systemctl --user enable elephant.service
