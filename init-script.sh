@@ -126,6 +126,7 @@ for folder in "${STOW_FOLDERS[@]}"; do
     stow -R -t "$HOME" "$folder"
 done
 
+set +e
 # Install Node via nvm
 echo "Installing Node.js 22 via nvm..."
 source /usr/share/nvm/init-nvm.sh
@@ -135,6 +136,7 @@ nvm use 22
 
 echo "Node version: $(node -v)"
 echo "npm version: $(npm -v)"
+set -e
 
 # Install Rust via rustup
 echo "Setting up Rust via rustup..."
@@ -154,6 +156,8 @@ systemctl --user enable hypridle.service
 systemctl --user enable hyprpaper.service
 systemctl --user enable waybar.service
 systemctl --user enable --now waybar.service
+
+mkdir -p ~/Pictures/Screenshots/
 
 # Elephant & Walker run as uwsm app -- instead of systemd native service
 
