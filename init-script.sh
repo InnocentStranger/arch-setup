@@ -113,7 +113,7 @@ STOW_FOLDERS=(
     "mako"
     "nvim"
     "starship"
-    # "systemd"
+    "systemd"
     "themes"
     "tmux"
     "uwsm"
