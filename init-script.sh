@@ -154,7 +154,6 @@ systemctl --user daemon-reload
 systemctl --user enable hyprpolkitagent.service
 systemctl --user enable hypridle.service
 systemctl --user enable hyprpaper.service
-systemctl --user enable waybar.service
 
 mkdir -p ~/Pictures/Screenshots/
 
