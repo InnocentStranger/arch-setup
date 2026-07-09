@@ -28,8 +28,10 @@ return {
         "ruff", -- Python
         "golangci-lint", -- Go
         "shellcheck", -- Shell/Bash
-        "markdownlint", -- Markdown
         "yamllint", -- YAML
+
+        -- ── DAP  ───────────────────────────────────
+        "codelldb",
       },
 
       -- Auto-update tools on startup

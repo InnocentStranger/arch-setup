@@ -140,7 +140,7 @@ return {
         sh = { "shellcheck" },
         bash = { "shellcheck" },
 
-        markdown = { "markdownlint" },
+        -- markdown = { "markdownlint" },
 
         yaml = { "yamllint" },
 

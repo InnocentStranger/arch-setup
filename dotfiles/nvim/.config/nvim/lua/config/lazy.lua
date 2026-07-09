@@ -27,6 +27,7 @@ require("lazy").setup({
     -- import your plugins
     { import = "plugins" },
     { import = "plugins.lsp" },
+    { import = "plugins.dap" },
     { import = "plugins.git" },
   },
   -- Configure any other settings here. See the documentation for more details.
