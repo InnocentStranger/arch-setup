@@ -14,6 +14,7 @@ alias tmux='tmux -u'
 
 # starship
 eval "$(starship init bash)"
+set EDITOR=nvim
 
 # nvm
 source /usr/share/nvm/init-nvm.sh
