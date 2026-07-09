@@ -37,7 +37,7 @@ hl.bind(
 hl.bind(
   "SHIFT + Print",
   hl.dsp.exec_cmd(
-    [[exec 200>/tmp/ss-region.lock; flock -n 200 || exit 0; grim -g "$(slurp)" - | satty -f - --early-exit --actions-on-enter="save-to-file,exit" --output-filename ~/Pictures/Screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png]]
+    [[exec 200>/tmp/ss-region.lock; flock -n 200 || exit 0; grim -g "$(slurp)" - | satty -f - --early-exit --actions-on-enter="save-to-file,exit" --output-filename ~/Pictures/Screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png --copy-command wl-copy]]
   )
 )
 
