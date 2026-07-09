@@ -151,9 +151,9 @@ echo "Enabling and starting Wayland user services..."
 systemctl --user daemon-reload
 
 # Enable daemons
-systemctl --user enable hyprpolkitagent.service
-systemctl --user enable hypridle.service
-systemctl --user enable hyprpaper.service
+systemctl --user enable --now hyprpolkitagent.service
+systemctl --user enable --now hypridle.service
+systemctl --user enable --now hyprpaper.service
 
 mkdir -p ~/Pictures/Screenshots/
 
