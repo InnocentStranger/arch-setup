@@ -9,9 +9,14 @@
 
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["clock"],
-  "modules-right": ["network", "bluetooth", "pulseaudio", "battery"],
+  "modules-right": [
+    "network",
+    "bluetooth",
+    "pulseaudio",
+    "power-profiles-daemon",
+    "battery",
+  ],
 
-  // ===================== Workspaces =====================
   "hyprland/workspaces": {
     "format": "{id}",
     "persistent-workspaces": {
@@ -27,8 +32,6 @@
     "tooltip": false,
   },
 
-  // ===================== Network (Wi-Fi/Ethernet) =====================
-  // Event-driven via netlink, not polled.
   "network": {
     "format-wifi": "  {essid}",
     "format-ethernet": "󰈀  Wired",
@@ -37,8 +40,6 @@
     "tooltip": false,
   },
 
-  // ===================== Bluetooth =====================
-  // Event-driven via dbus, not polled.
   "bluetooth": {
     "format": "",
     "format-connected": "  {device_alias}",
@@ -48,8 +49,6 @@
     "tooltip": false,
   },
 
-  // ===================== Volume =====================
-  // Event-driven via pulse/wireplumber, not polled.
   "pulseaudio": {
     "format": "{icon}  {volume}%",
     "format-muted": "󰝟  Muted",
@@ -61,8 +60,17 @@
     "tooltip": false,
   },
 
-  // ===================== Battery =====================
-  // Event-driven via upower, not polled. No tooltip/hover per your spec.
+  "power-profiles-daemon": {
+    "format": "{icon}  {profile}",
+    "tooltip": false,
+    "format-icons": {
+      "default": "󰾆",
+      "performance": "󰓅",
+      "balanced": "󰾆",
+      "power-saver": "󰌪",
+    },
+  },
+
   "battery": {
     "states": {
       "warning": 30,

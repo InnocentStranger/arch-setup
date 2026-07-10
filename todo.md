@@ -19,3 +19,14 @@
   - mic
   - brightness
   - power profile daemon (saver/balanced/perf)
+
+## Laptop
+
+- fwupd (update firmware from lvfs [linux vendor firmware service])
+- To set it to 90%, run:
+  echo 90 | sudo tee /sys/class/power_supply/BAT0/charge_control_end_threshold
+- cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver check flag
+
+sudo usermod -aG video $USER
+sudo udevadm control --reload-rules
+sudo udevadm trigger --subsystem-match=backlight

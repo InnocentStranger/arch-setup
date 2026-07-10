@@ -12,7 +12,6 @@ window#waybar {
   color: #e0e0e0;
 }
 
-/* ===================== Workspaces ===================== */
 #workspaces {
   background: transparent;
   margin: 4px 0 4px 6px;
@@ -46,42 +45,48 @@ window#waybar {
   color: #45475a;
 }
 
-/* ===================== Clock ===================== */
 #clock {
   font-weight: 600;
   color: #cdd6f4;
   padding: 0 14px;
 }
 
-/* ===================== Right modules shared look ===================== */
+/* Jitter fix applied here: min-width and text alignment */
 #network,
 #bluetooth,
 #pulseaudio,
+#power-profiles-daemon,
 #battery {
   background: rgba(255, 255, 255, 0.04);
   padding: 0 12px;
   margin: 4px 3px;
   border-radius: 6px;
   color: #cdd6f4;
+  min-width: 110px;
 }
 
-/* ===================== Network ===================== */
 #network.disconnected {
   color: #f38ba8;
 }
 
-/* ===================== Bluetooth ===================== */
 #bluetooth.disabled,
 #bluetooth.off {
   color: #6c7086;
 }
 
-/* ===================== Volume ===================== */
 #pulseaudio.muted {
   color: #f38ba8;
 }
 
-/* ===================== Battery ===================== */
+/* Color coding for power profiles */
+#power-profiles-daemon.performance {
+  color: #f38ba8;
+}
+
+#power-profiles-daemon.power-saver {
+  color: #a6e3a1;
+}
+
 #battery.warning {
   color: #f9e2af;
 }
