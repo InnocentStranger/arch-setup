@@ -65,6 +65,11 @@ window#waybar {
   min-width: 110px;
 }
 
+/* Specific override for PPD to accommodate the long "performance" string */
+#power-profiles-daemon {
+  min-width: 135px;
+}
+
 #network.disconnected {
   color: #f38ba8;
 }
