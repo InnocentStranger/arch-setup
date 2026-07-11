@@ -146,8 +146,8 @@ systemctl --user daemon-reload
 systemctl --user enable --now hyprpolkitagent.service
 systemctl --user enable --now hypridle.service
 # systemctl --user enable --now hyprpaper.service
-systemctl --user enable --now elephant.service
-systemctl --user enable --now walker.service
+# systemctl --user enable --now elephant.service
+# systemctl --user enable --now walker.service
 systemctl --user enable --now waybar.service
 # Elephant & Walker run as uwsm app -- instead of systemd native service
 
