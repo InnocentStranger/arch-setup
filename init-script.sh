@@ -62,6 +62,8 @@ arch_pacman_packages=(
     "fprintd"
     "awww"
     "matugen"
+    "adw-gtk-theme"
+    "nwg-look"
 )
 sudo pacman -Syu --needed "${arch_pacman_packages[@]}" --noconfirm
 sudo -k
@@ -99,19 +101,19 @@ echo "stow dotfiles..."
 cd "$(dirname "${BASH_SOURCE[0]}")/dotfiles"
 STOW_FOLDERS=(
     "bash"
-    # "autostart"
     "gtk"
     "hypr"
     "kitty"
     "mako"
+    "matugen"
     "nvim"
     "starship"
     "systemd"
-    # "themes"
     "tmux"
     "uwsm"
     "walker"
     "waybar"
+    "waypaper"
 )
 for folder in "${STOW_FOLDERS[@]}"; do
     echo "Stowing $folder..."
