@@ -62,9 +62,9 @@ arch_pacman_packages=(
     "fprintd"
     "awww"
     "matugen"
-    "adw-gtk-theme"
-    "nwg-look"
     "waypaper"
+    "loupe"
+    "mpv"
 )
 sudo pacman -Syu --needed "${arch_pacman_packages[@]}" --noconfirm
 sudo -k
@@ -146,11 +146,11 @@ echo "Enabling and starting Wayland user services..."
 systemctl --user daemon-reload
 systemctl --user enable --now hyprpolkitagent.service
 systemctl --user enable --now hypridle.service
-# systemctl --user enable --now hyprpaper.service
-# systemctl --user enable --now elephant.service
-# systemctl --user enable --now walker.service
 systemctl --user enable --now waybar.service
 # Elephant & Walker run as uwsm app -- instead of systemd native service
+
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
 
 echo "======================================================="
 echo "Setup Complete!"

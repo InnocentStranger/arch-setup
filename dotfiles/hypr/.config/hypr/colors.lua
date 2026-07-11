@@ -1,8 +1,8 @@
 -- Matugen generated colors for Hyprland
 return {
-  primary = "#abd290",
-  surface = "#11140e",
-  surface_variant = "#43483e",
-  primary_container = "#2e4f1b",
-  on_primary = "#183706",
+  primary = "#b0c6ff",
+  surface = "#121318",
+  surface_variant = "#44464f",
+  primary_container = "#2e4578",
+  on_primary = "#152e60",
 }

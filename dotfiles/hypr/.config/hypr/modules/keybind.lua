@@ -3,6 +3,7 @@ local programs = require("modules.programs")
 
 -- ── Core window/session ──────────────────────────────────────────────
 hl.bind(mod .. " + T", hl.dsp.exec_cmd(programs.terminal), { desc = "Launch terminal" })
+hl.bind(mod .. " + E", hl.dsp.exec_cmd(programs.files), { desc = "File Manager" })
 hl.bind(mod .. " + Q", hl.dsp.window.close(), { desc = "Close active window" })
 hl.bind(mod .. " + M", hl.dsp.exec_cmd(programs.logout), { desc = "Logout Session" })
 hl.bind(mod .. " + R", hl.dsp.exec_cmd(programs.app_launcher), { desc = "Open app launcher" })
