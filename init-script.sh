@@ -64,6 +64,7 @@ arch_pacman_packages=(
     "matugen"
     "adw-gtk-theme"
     "nwg-look"
+    "waypaper"
 )
 sudo pacman -Syu --needed "${arch_pacman_packages[@]}" --noconfirm
 sudo -k
