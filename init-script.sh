@@ -20,7 +20,7 @@ arch_pacman_packages=(
     "hyprland"
     "hyprlock"
     "hypridle"
-    "hyprpaper"
+    # "hyprpaper"
     "xdg-desktop-portal-hyprland"
     "xdg-desktop-portal-gtk"
     "hyprpolkitagent"
@@ -104,7 +104,7 @@ STOW_FOLDERS=(
     "nvim"
     "starship"
     "systemd"
-    "themes"
+    # "themes"
     "tmux"
     "uwsm"
     "walker"
@@ -140,7 +140,7 @@ echo "Enabling and starting Wayland user services..."
 systemctl --user daemon-reload
 systemctl --user enable --now hyprpolkitagent.service
 systemctl --user enable --now hypridle.service
-systemctl --user enable --now hyprpaper.service
+# systemctl --user enable --now hyprpaper.service
 systemctl --user enable --now elephant.service
 systemctl --user enable --now walker.service
 systemctl --user enable --now waybar.service

@@ -1,0 +1,18 @@
+[config.wallpaper]
+command = "awww"
+arguments = [
+    "img",
+    "--transition-type", "wipe",
+    "--transition-step", "90",
+    "--transition-fps", "60"
+]
+
+[templates.hyprland]
+input_path = "~/.config/matugen/templates/colors.lua"
+output_path = "~/.config/hypr/colors.lua"
+post_hook = "hyprctl reload"
+
+[templates.waybar]
+input_path = "~/.config/matugen/templates/colors.css"
+output_path = "~/.config/waybar/colors.css"
+post_hook = "pkill -SIGUSR2 waybar"

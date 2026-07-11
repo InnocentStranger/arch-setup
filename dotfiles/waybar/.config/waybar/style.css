@@ -1,3 +1,6 @@
+/* Import the Matugen generated variables */
+@import "colors.css";
+
 * {
   font-family: "JetBrainsMono Nerd Font";
   font-size: 13px;
@@ -6,10 +9,11 @@
 }
 
 window#waybar {
-  background: rgba(17, 18, 22, 0.92);
+  /* Using dynamic surface color with an alpha channel for your transparency */
+  background: alpha(@surface, 0.92);
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  color: #e0e0e0;
+  border: 1px solid alpha(@on-surface, 0.06);
+  color: @on-surface;
 }
 
 #workspaces {
@@ -19,8 +23,9 @@ window#waybar {
 }
 
 #workspaces button {
-  color: #6c7086;
+  color: @outline;
   background: transparent;
+  /* ... keeping your existing sizing/transitions ... */
   font-weight: 600;
   font-size: 11px;
   min-width: 20px;
@@ -32,74 +37,65 @@ window#waybar {
 }
 
 #workspaces button.active {
-  color: #1e1e2e;
-  background: #89b4fa;
+  color: @on-primary;
+  background: @primary;
 }
 
 #workspaces button:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #cdd6f4;
+  background: alpha(@on-surface, 0.08);
+  color: @primary-container;
 }
 
 #workspaces button.empty {
-  color: #45475a;
+  color: @surface-variant;
 }
 
 #clock {
   font-weight: 600;
-  color: #cdd6f4;
+  color: @primary;
   padding: 0 14px;
 }
 
-/* Jitter fix applied here: min-width and text alignment */
+/* Jitter fix and specific overrides remain untouched */
 #network,
 #bluetooth,
 #pulseaudio,
 #power-profiles-daemon,
 #battery {
-  background: rgba(255, 255, 255, 0.04);
+  background: alpha(@on-surface, 0.04);
   padding: 0 12px;
   margin: 4px 3px;
   border-radius: 6px;
-  color: #cdd6f4;
+  color: @on-surface;
   min-width: 110px;
 }
 
-/* Specific override for PPD to accommodate the long "performance" string */
 #power-profiles-daemon {
   min-width: 135px;
 }
 
-#network.disconnected {
+/* 
+  SEMANTIC COLORS: 
+  We leave these as static hex codes because a warning (like a low battery) 
+  should always be distinct (red/yellow) regardless of your wallpaper.
+*/
+#network.disconnected,
+#pulseaudio.muted,
+#power-profiles-daemon.performance,
+#battery.critical {
   color: #f38ba8;
 }
 
 #bluetooth.disabled,
 #bluetooth.off {
-  color: #6c7086;
+  color: @outline;
 }
 
-#pulseaudio.muted {
-  color: #f38ba8;
-}
-
-/* Color coding for power profiles */
-#power-profiles-daemon.performance {
-  color: #f38ba8;
-}
-
-#power-profiles-daemon.power-saver {
+#power-profiles-daemon.power-saver,
+#battery.charging {
   color: #a6e3a1;
 }
 
 #battery.warning {
   color: #f9e2af;
-}
-
-#battery.critical {
-  color: #f38ba8;
-}
-
-#battery.charging {
-  color: #a6e3a1;
 }
