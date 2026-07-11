@@ -59,6 +59,7 @@ arch_pacman_packages=(
     "power-profiles-daemon"
     "fwupd"
     "swayosd"
+    "fprintd"
 )
 sudo pacman -Syu --needed "${arch_pacman_packages[@]}" --noconfirm
 sudo -k
