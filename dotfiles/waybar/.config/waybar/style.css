@@ -3,26 +3,29 @@
 * {
   font-family: "JetBrainsMono Nerd Font";
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   min-height: 0;
   margin: 0;
   padding: 0;
 }
 
 window#waybar {
-  /* Make the main bar transparent to allow floating pills */
   background: transparent;
   color: @on-surface;
 }
 
-/* Base style for all pill containers */
+/* Base style for the floating pills */
 .modules-left,
 .modules-center,
 .modules-right {
-  background: alpha(@surface, 0.8);
-  border: 1px solid alpha(@outline, 0.15);
+  /* Using surface-variant for a more theme-tinted background */
+  background: alpha(@surface-variant, 0.85);
+  /* A prominent outline utilizing the primary theme color for depth */
+  border: 1px solid alpha(@primary, 0.25);
   border-radius: 99px;
   margin-top: 4px;
+  /* Static drop-shadow for 3D depth; static shadows do not drain battery */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.25);
 }
 
 /* -- LEFT PILL: Workspaces -- */
@@ -32,38 +35,48 @@ window#waybar {
 }
 
 #workspaces button {
-  color: @outline;
+  /* Default populated workspace text */
+  color: @on-surface;
   background: transparent;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 12px;
   min-width: 24px;
   min-height: 24px;
   border-radius: 99px;
-  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-#workspaces button.active {
-  color: @on-primary;
-  background: @primary;
-  min-width: 32px;
-}
-
-#workspaces button:hover {
-  background: alpha(@on-surface, 0.08);
-  color: @primary-container;
+  transition:
+    min-width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 #workspaces button.empty {
-  color: @surface-variant;
+  /* Removed the 0.6 alpha; using the standard variant color for safe contrast */
+  color: @on-surface-variant;
+}
+
+#workspaces button:hover {
+  background: alpha(@primary-container, 0.7);
+  color: @on-primary-container;
+}
+
+/* Explicitly chain .active and .empty so active states always guarantee contrast */
+#workspaces button.active,
+#workspaces button.active.empty {
+  color: @on-primary;
+  background: @primary;
+  min-width: 40px;
+  box-shadow: 0px 2px 4px alpha(@primary, 0.4);
 }
 
 /* -- CENTER PILL: Clock -- */
 .modules-center {
   padding: 0 16px;
+  /* A slightly more aggressive border for the center focal point */
+  border: 1px solid alpha(@primary, 0.4);
 }
 
 #clock {
-  font-weight: 600;
+  font-weight: 700;
   color: @primary;
   min-height: 32px;
 }
@@ -74,29 +87,46 @@ window#waybar {
   margin-right: 8px;
 }
 
+/* Distinct internal bubbles for each status module */
 #network,
 #bluetooth,
 #pulseaudio,
 #power-profiles-daemon,
 #battery {
-  background: alpha(@on-surface, 0.04);
+  /* Use a tinted primary background instead of neutral gray */
+  background: alpha(@primary, 0.1);
+  border: 1px solid alpha(@primary, 0.15);
   padding: 0 12px;
   margin: 4px 3px;
   border-radius: 99px;
   color: @on-surface;
-  transition: all 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 #power-profiles-daemon {
   min-width: 90px;
 }
 
-/* Semantic Status Colors */
+/* Interactive hover states for the right modules */
+#network:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#power-profiles-daemon:hover,
+#battery:hover {
+  background: alpha(@primary, 0.2);
+  border-color: alpha(@primary, 0.4);
+}
+
+/* Semantic Status Colors (Hardcoded to remain universally readable during alerts) */
 #network.disconnected,
 #pulseaudio.muted,
 #power-profiles-daemon.performance,
 #battery.critical {
   color: #f38ba8;
+  background: alpha(#f38ba8, 0.15);
+  border-color: alpha(#f38ba8, 0.3);
 }
 
 #bluetooth.disabled,
@@ -107,8 +137,12 @@ window#waybar {
 #power-profiles-daemon.power-saver,
 #battery.charging {
   color: #a6e3a1;
+  background: alpha(#a6e3a1, 0.15);
+  border-color: alpha(#a6e3a1, 0.3);
 }
 
 #battery.warning {
   color: #f9e2af;
+  background: alpha(#f9e2af, 0.15);
+  border-color: alpha(#f9e2af, 0.3);
 }
