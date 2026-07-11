@@ -9,7 +9,7 @@ post_hook = "pkill -SIGUSR2 waybar"
 
 # -- HYPRLAND --
 [templates.hyprland]
-input_path = "~/.config/matugen/templates/hyprland-colors.lua"
+input_path = "~/.config/matugen/templates/colors.lua"
 output_path = "~/.config/hypr/colors.lua"
 post_hook = "hyprctl reload"
 
@@ -22,11 +22,11 @@ post_hook = "killall -SIGUSR1 kitty"
 # -- GTK 4 (Libadwaita) --
 [templates.gtk4]
 input_path = "~/.config/matugen/templates/gtk-colors.css"
-output_path = "~/.config/gtk-4.0/gtk.css"
+output_path = "~/.config/gtk-4.0/gtk-colors.css"
 post_hook = '~/.config/matugen/post-hook-scripts/gtk-themes-reload.sh'
 
 # -- GTK 3 (Requires adw-gtk3 theme) --
 [templates.gtk3]
 input_path = "~/.config/matugen/templates/gtk-colors.css"
-output_path = "~/.config/gtk-3.0/gtk.css"
+output_path = "~/.config/gtk-3.0/gtk-colors.css"
 post_hook = 'gsettings set org.gnome.desktop.interface gtk-theme ""; gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-{{mode}}'
