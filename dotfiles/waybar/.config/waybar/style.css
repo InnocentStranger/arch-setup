@@ -1,4 +1,3 @@
-/* Import the Matugen generated variables */
 @import "colors.css";
 
 * {
@@ -6,39 +5,47 @@
   font-size: 13px;
   font-weight: 500;
   min-height: 0;
+  margin: 0;
+  padding: 0;
 }
 
 window#waybar {
-  /* Using dynamic surface color with an alpha channel for your transparency */
-  background: alpha(@surface, 0.92);
-  border-radius: 10px;
-  border: 1px solid alpha(@on-surface, 0.06);
+  /* Make the main bar transparent to allow floating pills */
+  background: transparent;
   color: @on-surface;
 }
 
-#workspaces {
-  background: transparent;
-  margin: 4px 0 4px 6px;
-  padding: 0 4px;
+/* Base style for all pill containers */
+.modules-left,
+.modules-center,
+.modules-right {
+  background: alpha(@surface, 0.8);
+  border: 1px solid alpha(@outline, 0.15);
+  border-radius: 99px;
+  margin-top: 4px;
+}
+
+/* -- LEFT PILL: Workspaces -- */
+.modules-left {
+  padding: 4px;
+  margin-left: 8px;
 }
 
 #workspaces button {
   color: @outline;
   background: transparent;
-  /* ... keeping your existing sizing/transitions ... */
   font-weight: 600;
-  font-size: 11px;
-  min-width: 20px;
-  min-height: 20px;
-  padding: 0;
-  margin: 0 3px;
-  border-radius: 999px;
-  transition: all 0.15s ease-in-out;
+  font-size: 12px;
+  min-width: 24px;
+  min-height: 24px;
+  border-radius: 99px;
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 #workspaces button.active {
   color: @on-primary;
   background: @primary;
+  min-width: 32px;
 }
 
 #workspaces button:hover {
@@ -50,13 +57,23 @@ window#waybar {
   color: @surface-variant;
 }
 
+/* -- CENTER PILL: Clock -- */
+.modules-center {
+  padding: 0 16px;
+}
+
 #clock {
   font-weight: 600;
   color: @primary;
-  padding: 0 14px;
+  min-height: 32px;
 }
 
-/* Jitter fix and specific overrides remain untouched */
+/* -- RIGHT PILL: System Tray & Status -- */
+.modules-right {
+  padding: 0 4px;
+  margin-right: 8px;
+}
+
 #network,
 #bluetooth,
 #pulseaudio,
@@ -65,20 +82,16 @@ window#waybar {
   background: alpha(@on-surface, 0.04);
   padding: 0 12px;
   margin: 4px 3px;
-  border-radius: 6px;
+  border-radius: 99px;
   color: @on-surface;
-  min-width: 110px;
+  transition: all 0.2s ease;
 }
 
 #power-profiles-daemon {
-  min-width: 135px;
+  min-width: 90px;
 }
 
-/* 
-  SEMANTIC COLORS: 
-  We leave these as static hex codes because a warning (like a low battery) 
-  should always be distinct (red/yellow) regardless of your wallpaper.
-*/
+/* Semantic Status Colors */
 #network.disconnected,
 #pulseaudio.muted,
 #power-profiles-daemon.performance,

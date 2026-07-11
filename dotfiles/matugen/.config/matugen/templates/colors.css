@@ -1,5 +1,0 @@
-/* Matugen generated colors for Waybar */
-@define-color primary {{ colors.primary.default.hex }};
-@define-color surface {{ colors.surface.default.hex }};
-@define-color primary-container {{ colors.primary_container.default.hex }};
-@define-color on-primary {{ colors.on_primary.default.hex }};

@@ -2,6 +2,7 @@
 return {
   primary = "{{ colors.primary.default.hex }}",
   surface = "{{ colors.surface.default.hex }}",
+  surface_variant = "{{ colors.surface_variant.default.hex }}",
   primary_container = "{{ colors.primary_container.default.hex }}",
   on_primary = "{{ colors.on_primary.default.hex }}",
 }

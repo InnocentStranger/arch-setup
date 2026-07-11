@@ -60,6 +60,8 @@ arch_pacman_packages=(
     "fwupd"
     "swayosd"
     "fprintd"
+    "awww"
+    "matugen"
 )
 sudo pacman -Syu --needed "${arch_pacman_packages[@]}" --noconfirm
 sudo -k

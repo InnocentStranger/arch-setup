@@ -2,29 +2,39 @@
 -- BATTERY-OPTIMIZED DECORATION & ANIMATION CONFIG
 -- ==============================================================================
 
+package.loaded["colors"] = nil
+
+local success, loaded_colors = pcall(require, "colors")
+
+local colors = {}
+if success and type(loaded_colors) == "table" then
+  colors = loaded_colors
+end
+
+local active_hex = colors.primary or "#ffffff"
+local inactive_hex = colors.surface_variant or "#2a2a2a"
+
+local function to_rgb(hex)
+  return "rgb(" .. hex:sub(2) .. ")"
+end
+
 hl.config({
   general = {
     border_size = 1,
     col = {
-      active_border = "rgba(ffffff99)",
-      inactive_border = "rgba(2a2a2add)",
+      active_border = to_rgb(active_hex),
+      inactive_border = to_rgb(inactive_hex),
     },
   },
   decoration = {
     rounding = 0,
-
-    active_opacity = 1.0,
-    inactive_opacity = 0.8,
-
     shadow = {
       enabled = false,
     },
-
     blur = {
       enabled = false,
     },
   },
-
   animations = {
     enabled = true,
   },
